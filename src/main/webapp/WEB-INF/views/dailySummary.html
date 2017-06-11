@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+$(document).ready(function(){
+    $("#summary").click(function(){
+        var summaryData = [];
+        $(".updateInput").each(function(i, o){summaryData.push(o.value)})
+        var data = {
+            "teamEmail" : document.getElementById("team_email").value,
+            "summary" : summaryData,
+            "category" : document.getElementById("category").value,
+            "teamName" : $('#team_email :selected').text()
+        }
+        $.ajax({
+            url:"/dailySummary/save",
+            type:"POST",
+            data:JSON.stringify(data),
+            contentType:"application/json; charset=utf-8",
+            dataType:"json",
+            success: function(){
+                location.reload();
+            }
+        })
+    });
+
+    $("#sendMail").click(function(){
+        window.location = "/sendMail"
+    });
+
+   $(".jobDesciptionList").on('keypress',function(e){
+
+            var inputEle ='<div class="updateRecord">'+
+            '<input type="text" class="form-control updateInput"  placeholder="Enter Description">'+
+            '<span class="delete-update"><span class="glyphicon glyphicon-remove"></span></div>';
+
+           if(e.keyCode === 13){
+             var ele = e.target;
+             var updateRecord = $(ele).closest(".updateRecord");
+              if(updateRecord.next().length === 0){
+                $(inputEle).insertAfter(updateRecord).find("input").focus();
+              }
+           }
+   })
+
+   $(".jobDesciptionList").on("click",".delete-update",function(){
+        $(this).closest(".updateRecord").remove();
+   })
+});
+
+
+    </script>
+    <style>
+
+
+         .statusUpdateFormWrapper {
+          max-width: 700px;
+          margin: 0px auto;
+          padding: 30px 20px;
+          background: #f1f1f1;
+         }
+
+         .statusUpdateFormWrapper select,
+         .statusUpdateFormWrapper .jobHeading{
+               width: 250px;
+         }
+
+
+
+         .jobDesciptionList .updateRecord {
+            margin-top: 10px;
+            padding-right: 45px;
+            position: relative;
+         }
+
+         .jobDesciptionList .updateRecord .delete-update {
+            position: absolute;
+            right: 5px;
+            top: 0;
+            padding: 3px 10px;
+            font-size: 18px;
+            border: 1px solid red;
+            color: red;
+            border-radius: 3px;
+            cursor: pointer;
+         }
+
+         .tab {
+            padding-left:4em;
+         }
+
+         .jobDesciptionList .updateRecord .delete-update:hover {
+                background: #fff;
+         }
+
+         .position-right {
+            float:right;
+         }
+    </style>
+</head>
+<body>
+<div>
+    <button type="submit" class="btn btn-primary position-right" id="sendMail"><span class="glyphicon glyphicon-envelope"></span></button>
+</div>
+<div class="statusUpdateFormWrapper">
+    <div class="form">
+        <div class="form-group">
+            <label>Team Name</label>
+            <select class="form-control" id="team_email">
+                <option value="Digital-Gryffindor@msroot.kroger.com">Gryffindor(Bangalore)</option>
+                <option value="prasenjitchk123@gmail.com">prasenjit</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select></div>
+        <div class="form-group jobHeading">
+            <label>Job Heading</label>
+            <input type="text" class="form-control" placeholder="Enter Job Heading" id="category">
+        </div>
+        <div class="jobDesciptionList">
+            <div class="form-group">
+                <label>Job Description</label>
+                <div class="updateRecord">
+                    <input type="text" class="form-control updateInput" placeholder="Enter Description">
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="summary">Save</button>
+    </div>
+</div>
+</body>
+</html>

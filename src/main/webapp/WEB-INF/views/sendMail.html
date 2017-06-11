@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<style>
+    .statusUpdateFormWrapper {
+          max-width: 700px;
+          margin: 0px auto;
+          padding: 30px 20px;
+          background: #f1f1f1;
+          }
+    .position-right {
+            float:right;
+         }
+
+</style>
+<script>
+$(document).ready(function(){
+    $("#home").click(function(){
+        window.location = "/";
+    });
+    $("#send").click(function(){
+        var data = {
+            "receiver" : document.getElementById("receiver").value,
+            "adminUserName" : document.getElementById("adminUserName").value,
+            "adminPassword" : document.getElementById("adminPassword").value
+        }
+        $.ajax({
+            url:"/dailySummary/send",
+            type:"POST",
+            data:JSON.stringify(data),
+            contentType:"application/json; charset=utf-8",
+            dataType:"json",
+            success: function() {
+                $("#success").removeClass("hide");
+            },
+            error: function() {
+                $("#error").removeClass("hide");
+            }
+
+        })
+    });
+    $("#close_error_popup").click(function(){
+        $("#error").addClass("hide");
+    });
+    $("#close_success_popup").click(function(){
+        $("#success").addClass("hide");
+    });
+
+})
+
+
+</script>
+<style>
+    .position-right {
+            float:right;
+         }
+</style>
+<body>
+<div class="alert alert-success hide" id="success">
+    <strong>Success!</strong> EOD sent successfully.
+    <button type="submit" class="position-right" id="close_success_popup"><span class="glyphicon glyphicon-remove"></span></button>
+</div>
+<div class="alert alert-danger hide" id="error">
+    <strong>Error!</strong> Wrong admin user name or password. Please try again.
+    <button type="submit" class="position-right" id="close_error_popup"><span class="glyphicon glyphicon-remove"></span></button>
+</div>
+<div>
+    <button type="submit" class="btn btn-primary position-right" id="home"><span
+            class="glyphicon glyphicon-home"></span></button>
+</div>
+<div class="statusUpdateFormWrapper">
+    <div class="form-group">
+        <label>Team Name</label>
+        <select class="form-control" id="receiver">
+            <option value="Digital-Gryffindor@msroot.kroger.com">Gryffindor(Bangalore)</option>
+            <option value="prasenjitchk123@gmail.com">Gryffindor(Bangalore)-Test</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+    </div>
+    <div class="form-group jobHeading">
+        <label>ADMIN USER</label>
+        <input type="text" class="form-control" placeholder="User Name" id="adminUserName">
+    </div>
+
+    <div class="form-group jobHeading">
+        <label>ADMIN PASSWORD</label>
+        <input type="password" class="form-control" placeholder="Enter Password" id="adminPassword">
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="send"><span class="glyphicon glyphicon-send"></span></button>
+</div>
+
+</body>
+</html>
