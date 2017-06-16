@@ -8,18 +8,15 @@
 </head>
 <style>
     .statusUpdateFormWrapper {
-          max-width: 700px;
-          margin: 0px auto;
-          padding: 30px 20px;
-          background: #f1f1f1;
-     }
+      max-width: 700px;
+      margin: 0px auto;
+      padding: 30px 20px;
+      background: #f1f1f1;
+    }
     .position-right {
         float:right;
     }
-    .backGround {
-        background-color: lavender;
-    }
-     .navbar-brand {
+    .navbar-brand {
       padding: 0px;
     }
     .navbar-brand>img {
@@ -67,6 +64,7 @@
 
 
 </style>
+
 <script>
 $(document).ready(function(){
     $("#home").click(function(){
@@ -77,51 +75,40 @@ $(document).ready(function(){
             window.location = "/";
         }
     });
-    $("#send").click(function(){
-        var data = {
-            "receiver" : document.getElementById("receiver").value,
-            "adminUserName" : document.getElementById("adminUserName").value,
-            "adminPassword" : document.getElementById("adminPassword").value
-        }
-        $.ajax({
-            url:"/dailySummary/send",
-            type:"POST",
-            data:JSON.stringify(data),
-            contentType:"application/json; charset=utf-8",
-            dataType:"json",
-            success: function() {
-                $("#success").removeClass("hide");
-            },
-            error: function() {
-                $("#error").removeClass("hide");
-            }
 
-        })
-    });
-    $("#close_error_popup").click(function(){
+    $("#addMember").click(function(){
+    var data = {
+        "memberName" : document.getElementById("memberName").value,
+        "memberEmail" : document.getElementById("memberEmail").value,
+        "teamEmail" : document.getElementById("team_email").value,
+        "teamName" : $('#team_email :selected').text(),
+        "adminUserName" : document.getElementById("adminUserName").value,
+        "adminPassword" : document.getElementById("adminPassword").value
+    }
+    $.ajax({
+        url:"/addMember",
+        type:"POST",
+        data:JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        success: function() {
+            $("#success").removeClass("hide");
+        },
+        error: function() {
+            $("#error").removeClass("hide");
+        }
+    })
+
+   });
+
+   $("#close_error_popup").click(function(){
         $("#error").addClass("hide");
     });
-    $("#close_success_popup").click(function(){
-        $("#success").addClass("hide");
-    });
-    $("#preview").click(function(){
-        var data = {
-            "emailId" : document.getElementById("receiver").value
-        }
-        $.ajax({
-            url: "/preview",
-            type:"POST",
-            data:JSON.stringify(data),
-            contentType:"application/json; charset=utf-8",
-            dataType:"json",
-            success: function(data){
-                console.log(data);
-                $("#preview_div").html(data.emailBody);
-            }
-        })
 
-    })
-    var renderSelectList = function() {
+   $("#close_success_popup").click(function(){
+       $("#success").addClass("hide");
+   });
+   var renderSelectList = function() {
     var currentUserEmail = $.cookie("userEmail");
     $.ajax({
             url:"/team/getAll",
@@ -132,7 +119,7 @@ $(document).ready(function(){
                 data.teams.forEach(function(team) {
                     var teamName = team.teamName;
                     var teamEmail = team.teamEmail;
-                    var select = document.getElementById("receiver");
+                    var select = document.getElementById("team_email");
                     var option = document.createElement("option");
                     option.value = teamEmail;
                     option.text = teamName;
@@ -144,16 +131,20 @@ $(document).ready(function(){
 })
 
 
+
 </script>
+
 <body>
 <div class="alert alert-success hide" id="success">
-    <strong>Success!</strong> EOD sent successfully.
+    <strong>Success!</strong> Member added successfully.
     <button type="submit" class="position-right" id="close_success_popup"><span class="glyphicon glyphicon-remove"></span></button>
 </div>
+
 <div class="alert alert-danger hide" id="error">
-    <strong>Error!</strong> Wrong admin user name or password. Please try again.
+    <strong>Error!</strong> Something went wrong. Please try again.
     <button type="submit" class="position-right" id="close_error_popup"><span class="glyphicon glyphicon-remove"></span></button>
 </div>
+
 <div class="container">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -164,31 +155,35 @@ $(document).ready(function(){
 
             <div id="navbar9" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#" class="active" id="home"><span class="glyphicon glyphicon-home"></span></a></li>
+                    <li><a href="#" class="active" id="home"><span class="glyphicon glyphicon-home"></span></i></a></li>
                 </ul>
             </div>
         </div>
     </nav>
 </div>
+
 <div class="statusUpdateFormWrapper">
     <div class="form-group">
         <label>Team Name</label>
-        <select class="form-control" id="receiver">
+        <select class="form-control" id="team_email">
         </select>
+        <div class="input-group margin-bottom-sm">
+            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+            <input class="form-control" type="text" placeholder="Member email" id="memberEmail">
+        </div><br/>
+        <div class="form-group jobHeading">
+            <input type="text" class="form-control" placeholder="Member Name" id="memberName">
+        </div>
+        <div class="input-group margin-bottom-sm">
+            <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+            <input class="form-control" type="text" placeholder="Admin user name" id="adminUserName">
+        </div><br/>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+            <input class="form-control" type="password" placeholder="Password" id="adminPassword">
+        </div><br/>
+        <button type="submit" class="btn btn-primary" id="addMember"><i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>
-    <div class="input-group margin-bottom-sm">
-        <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
-        <input class="form-control" type="text" placeholder="Admin user name" id="adminUserName">
-    </div><br/>
-    <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-        <input class="form-control" type="password" placeholder="Password" id="adminPassword">
-    </div><br/>
-
-    <button type="submit" class="btn btn-primary" id="send"><span class="glyphicon glyphicon-send"></span></button>
-    <button type="submit" class="btn btn-primary" id="preview"><i class="fa fa-eye" style="font-size:18px"></i></button>
-</div>
-<div id="preview_div" class="statusUpdateFormWrapper backGround">
 </div>
 </body>
 </html>

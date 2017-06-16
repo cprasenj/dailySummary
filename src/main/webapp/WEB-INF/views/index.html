@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    .statusUpdateFormWrapper {
+      max-width: 700px;
+      margin: 0px auto;
+      padding: 30px 20px;
+      background: #f1f1f1;
+    }
+    .position-right {
+        float:right;
+    }
+    .navbar-brand {
+      padding: 0px;
+    }
+    .navbar-brand>img {
+      height: 100%;
+      padding: 15px;
+      width: auto;
+    }
+    .brand-centered {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+      left: 0;
+      top: 0;
+    }
+    .brand-centered .navbar-brand {
+      display: flex;
+      align-items: center;
+    }
+    .navbar-toggle {
+        z-index: 1;
+    }
+    .navbar-alignit .navbar-header {
+          -webkit-transform-style: preserve-3d;
+      -moz-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+      height: 50px;
+    }
+    .navbar-alignit .navbar-brand {
+        top: 50%;
+        display: block;
+        position: relative;
+        height: auto;
+        transform: translate(0,-50%);
+        margin-right: 15px;
+      margin-left: 15px;
+    }
+    .navbar-nav>li>.dropdown-menu {
+        z-index: 9999;
+    }
+
+    body {
+      font-family: "Lato";
+    }
+
+    </style>
+    <script>
+    $(document).ready(function(){
+        $("#start").click(function(){
+            var data = {
+                "emailId" : document.getElementById("krogerUserEmail").value
+            }
+            $.ajax({
+                url: "/team",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(data),
+                success: function(){
+                    localStorage.setItem("userEmail", document.getElementById("krogerUserEmail").value);
+                    window.location = "/dailySummary"
+                },
+                error: function() {
+                    $("#error").removeClass("hide");
+                }
+            })
+
+        });
+        $("#addMember").bind("click", function(){
+            window.location = "/addMember";
+        });
+
+        $("#createTeam").bind("click", function(){
+            window.location = "/createTeam"
+        });
+        $("#close_error_popup").click(function(){
+            $("#error").addClass("hide");
+        });
+
+    })
+
+    </script>
+
+</head>
+<body class="body">
+<div class="alert alert-danger hide" id="error">
+    <strong>Error!</strong> Not a valid emailid. Please try again.
+    <button type="submit" class="position-right" id="close_error_popup"><span class="glyphicon glyphicon-remove"></span>
+    </button>
+</div>
+
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="brand-centered">
+                <a class="navbar-brand" href=""><img style="margin-right: 10px; padding: 0;" src="http://res.cloudinary.com/dzpzeprjj/image/upload/v1497530014/Current_Kroger_logo.svg_dmdguv.png" alt="Dispute Bills">Daily Summary
+                </a>
+            </div>
+
+            <div id="navbar9" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" class="active" id="addMember"><i class="fa fa-user-plus"></i></a></li>
+                    <li><a href="#" class="active" id="createTeam"><i class="fa fa-users" aria-hidden="true"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="statusUpdateFormWrapper">
+    <div class="input-group margin-bottom-sm">
+        <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+        <input class="form-control" type="text" placeholder="Kroger email id" id="krogerUserEmail">
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-primary" id="start"><span class="glyphicon glyphicon-ok"></span></button>
+</div>
+</body>
+</html>

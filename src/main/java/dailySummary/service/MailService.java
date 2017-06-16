@@ -1,6 +1,7 @@
 package dailySummary.service;
 
 import dailySummary.constant.StringConstants;
+import dailySummary.contract.Preview;
 import dailySummary.model.DailySummary;
 import dailySummary.model.MailMessage;
 import dailySummary.repository.DailySummaryRepository;
@@ -35,9 +36,22 @@ public class MailService {
         return Boolean.TRUE;
     }
 
+    public Preview preview(String receiver) {
+        List<DailySummary> toDaySummaryForATeam = dailySummaryRepository.findAll()
+                .stream()
+                .filter(isTodayUpdate())
+                .filter(d -> Objects.equals(d.getTeamEmail(), receiver))
+                .collect(Collectors.toList());
+
+        String body = draftMailBody(toDaySummaryForATeam);
+        String formattedDate = formatDate(new Date());
+        String header = String.format(StringConstants.HEADER, formattedDate);
+        return Preview.builder().emailBody(String.format(StringConstants.PREVIEW_BODY, header, body, toDaySummaryForATeam.get(0).getTeamName())).build();
+    }
+
     private Consumer<MailMessage> sendMailToRequestedReceiver(String receiver) {
         return m -> {
-            if(Objects.equals(m.getReceiver(), receiver)) {
+            if (Objects.equals(m.getReceiver(), receiver)) {
                 sender.send(m.getMessage());
             }
         };

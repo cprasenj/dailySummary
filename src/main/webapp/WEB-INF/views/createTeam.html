@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+</head>
+<style>
+    .statusUpdateFormWrapper {
+          max-width: 700px;
+          margin: 0px auto;
+          padding: 30px 20px;
+          background: #f1f1f1;
+          }
+    .position-right {
+            float:right;
+         }
+
+    .navbar-brand {
+      padding: 0px;
+    }
+    .navbar-brand>img {
+      height: 100%;
+      padding: 15px;
+      width: auto;
+    }
+    .brand-centered {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+      left: 0;
+      top: 0;
+    }
+    .brand-centered .navbar-brand {
+      display: flex;
+      align-items: center;
+    }
+    .navbar-toggle {
+        z-index: 1;
+    }
+    .navbar-alignit .navbar-header {
+          -webkit-transform-style: preserve-3d;
+      -moz-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+      height: 50px;
+    }
+    .navbar-alignit .navbar-brand {
+        top: 50%;
+        display: block;
+        position: relative;
+        height: auto;
+        transform: translate(0,-50%);
+        margin-right: 15px;
+      margin-left: 15px;
+    }
+    .navbar-nav>li>.dropdown-menu {
+        z-index: 9999;
+    }
+
+    body {
+      font-family: "Lato";
+    }
+
+</style>
+
+<script>
+$(document).ready(function(){
+    $("#home").click(function(){
+        var currentUserEmail = localStorage.userEmail
+        if(currentUserEmail != "" || currentUserEmail != null) {
+            window.location = "/dailySummary";
+        } else {
+            window.location = "/";
+        }
+    });
+
+    $("#createTeam").click(function(){
+    var data = {
+        "teamEmail" : document.getElementById("teamEmail").value,
+        "teamName" : document.getElementById("teamName").value,
+        "adminUserName" : document.getElementById("adminUserName").value,
+        "adminPassword" : document.getElementById("adminPassword").value
+    }
+    $.ajax({
+        url:"/createTeam",
+        type:"POST",
+        data:JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        success: function() {
+            location.reload();
+            $("#success").removeClass("hide");
+        },
+        error: function(res) {
+        alert(JSON.stringify(res))
+        alert("error")
+            $("#error").removeClass("hide");
+        }
+    })
+
+   });
+
+   $("#close_error_popup").click(function(){
+        $("#error").addClass("hide");
+    });
+
+   $("#close_success_popup").click(function(){
+       $("#success").addClass("hide");
+   });
+})
+
+
+
+</script>
+
+<body>
+<div class="alert alert-success hide" id="success">
+    <strong>Success!</strong>  Team created successfully.
+    <button type="submit" class="position-right" id="close_success_popup"><span class="glyphicon glyphicon-remove"></span></button>
+</div>
+<div class="alert alert-danger hide" id="error">
+    <strong>Error!</strong> Something went wrong. Please try again.
+    <button type="submit" class="position-right" id="close_error_popup"><span class="glyphicon glyphicon-remove"></span></button>
+</div>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="brand-centered">
+                <a class="navbar-brand" href=""><img style="margin-right: 10px; padding: 0;" src="http://res.cloudinary.com/dzpzeprjj/image/upload/v1497530014/Current_Kroger_logo.svg_dmdguv.png" alt="Dispute Bills">Daily Summary
+                </a>
+            </div>
+
+            <div id="navbar9" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" class="active" id="home"><span class="glyphicon glyphicon-home"></span></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="statusUpdateFormWrapper">
+    <div class="form-group">
+        <div class="form-group jobHeading">
+            <input type="text" class="form-control" placeholder="Team Name" id="teamName">
+        </div>
+        <div class="input-group margin-bottom-sm">
+            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+            <input class="form-control" type="text" placeholder="Team email" id="teamEmail">
+        </div><br/>
+        <div class="input-group margin-bottom-sm">
+            <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+            <input class="form-control" type="text" placeholder="Admin user name" id="adminUserName">
+        </div><br/>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+            <input class="form-control" type="password" placeholder="Password" id="adminPassword">
+        </div><br/>
+        <button type="submit" class="btn btn-primary" id="createTeam"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    </div>
+</div>
+</body>
+</html>

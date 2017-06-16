@@ -2,7 +2,9 @@
 <html>
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script>
 $(document).ready(function(){
     $("#summary").click(function(){
@@ -30,6 +32,16 @@ $(document).ready(function(){
         window.location = "/sendMail"
     });
 
+    $("#addMember").click(function(){
+        window.location = "/addMember"
+    });
+    $("#createTeam").click(function(){
+        window.location = "/createTeam"
+    });
+    $("#switchUser").click(function(){
+        window.location = "/"
+    });
+
    $(".jobDesciptionList").on('keypress',function(e){
 
             var inputEle ='<div class="updateRecord">'+
@@ -48,6 +60,50 @@ $(document).ready(function(){
    $(".jobDesciptionList").on("click",".delete-update",function(){
         $(this).closest(".updateRecord").remove();
    })
+
+   $("#preview").click(function(){
+        var data = {
+            "emailId" : document.getElementById("team_email").value
+        }
+        $.ajax({
+            url: "/preview",
+            type:"POST",
+            data:JSON.stringify(data),
+            contentType:"application/json; charset=utf-8",
+            dataType:"json",
+            success: function(data){
+                console.log(data);
+                $("#preview_div").html(data.emailBody);
+            }
+        })
+
+    })
+
+   var renderSelectList = function() {
+    var data = {
+        "emailId" : localStorage.userEmail
+    }
+    $.ajax({
+            url:"/team",
+            type:"POST",
+            contentType:"application/json; charset=utf-8",
+            dataType:"json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            success: function(data){
+                var teamName = data.teamName;
+                var teamEmail = data.teamEmail;
+                var select = document.getElementById("team_email");
+                var option = document.createElement("option");
+                option.value = teamEmail;
+                option.text = teamName;
+                select.appendChild(option);
+            },
+            error: function() {
+                console.log("something went wrong")
+            }
+        })
+   }();
 });
 
 
@@ -55,81 +111,139 @@ $(document).ready(function(){
     <style>
 
 
-         .statusUpdateFormWrapper {
-          max-width: 700px;
-          margin: 0px auto;
-          padding: 30px 20px;
-          background: #f1f1f1;
-         }
+     .statusUpdateFormWrapper {
+      max-width: 700px;
+      margin: 0px auto;
+      padding: 30px 20px;
+      background: #f1f1f1;
+     }
 
-         .statusUpdateFormWrapper select,
-         .statusUpdateFormWrapper .jobHeading{
-               width: 250px;
-         }
+     .statusUpdateFormWrapper select,
+     .statusUpdateFormWrapper .jobHeading{
+           width: 250px;
+     }
 
 
 
-         .jobDesciptionList .updateRecord {
-            margin-top: 10px;
-            padding-right: 45px;
-            position: relative;
-         }
+     .jobDesciptionList .updateRecord {
+        margin-top: 10px;
+        padding-right: 45px;
+        position: relative;
+     }
 
-         .jobDesciptionList .updateRecord .delete-update {
-            position: absolute;
-            right: 5px;
-            top: 0;
-            padding: 3px 10px;
-            font-size: 18px;
-            border: 1px solid red;
-            color: red;
-            border-radius: 3px;
-            cursor: pointer;
-         }
+     .jobDesciptionList .updateRecord .delete-update {
+        position: absolute;
+        right: 5px;
+        top: 0;
+        padding: 3px 10px;
+        font-size: 18px;
+        border: 1px solid red;
+        color: red;
+        border-radius: 3px;
+        cursor: pointer;
+     }
+     .backGround {
+        background-color: lavender;
+     }
 
-         .tab {
-            padding-left:4em;
-         }
 
-         .jobDesciptionList .updateRecord .delete-update:hover {
-                background: #fff;
-         }
+     .jobDesciptionList .updateRecord .delete-update:hover {
+            background: #fff;
+     }
 
-         .position-right {
-            float:right;
-         }
+     .position-right {
+        float:right;
+     }
+
+     .navbar-brand {
+      padding: 0px;
+    }
+    .navbar-brand>img {
+      height: 100%;
+      padding: 15px;
+      width: auto;
+    }
+    .brand-centered {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+      left: 0;
+      top: 0;
+    }
+    .brand-centered .navbar-brand {
+      display: flex;
+      align-items: center;
+    }
+    .navbar-toggle {
+        z-index: 1;
+    }
+    .navbar-alignit .navbar-header {
+          -webkit-transform-style: preserve-3d;
+      -moz-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+      height: 50px;
+    }
+    .navbar-alignit .navbar-brand {
+        top: 50%;
+        display: block;
+        position: relative;
+        height: auto;
+        transform: translate(0,-50%);
+        margin-right: 15px;
+      margin-left: 15px;
+    }
+    .navbar-nav>li>.dropdown-menu {
+        z-index: 9999;
+    }
+
+    body {
+      font-family: "Lato";
+    }
+
     </style>
 </head>
 <body>
-<div>
-    <button type="submit" class="btn btn-primary position-right" id="sendMail"><span class="glyphicon glyphicon-envelope"></span></button>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="brand-centered">
+                <a class="navbar-brand" href=""><img style="margin-right: 10px; padding: 0;" src="http://res.cloudinary.com/dzpzeprjj/image/upload/v1497530014/Current_Kroger_logo.svg_dmdguv.png" alt="Dispute Bills">Daily Summary
+                </a>
+            </div>
+
+            <div id="navbar9" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" class="active" id="createTeam"><i class="fa fa-users" aria-hidden="true"></i></a></li>
+                    <li><a href="#" class="active" id="addMember"><i class="fa fa-user-plus" aria-hidden="true"></i></a></li>
+                    <li><a href="#" class="active" id="sendMail"><span class="glyphicon glyphicon-envelope"></span></a></li>
+                    <li><a href="#" class="active" id="switchUser"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 </div>
 <div class="statusUpdateFormWrapper">
     <div class="form">
         <div class="form-group">
             <label>Team Name</label>
             <select class="form-control" id="team_email">
-                <option value="Digital-Gryffindor@msroot.kroger.com">Gryffindor(Bangalore)</option>
-                <option value="prasenjitchk123@gmail.com">prasenjit</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
             </select></div>
         <div class="form-group jobHeading">
-            <label>Job Heading</label>
-            <input type="text" class="form-control" placeholder="Enter Job Heading" id="category">
+            <input class="form-control" type="text" placeholder="Enter Job Heading" id="category">
         </div>
         <div class="jobDesciptionList">
             <div class="form-group">
-                <label>Job Description</label>
                 <div class="updateRecord">
-                    <input type="text" class="form-control updateInput" placeholder="Enter Description">
+                    <input class="form-control updateInput" type="text" placeholder="Job Description">
                 </div>
-            </div>
+            </div><br/>
         </div>
 
-        <button type="submit" class="btn btn-primary" id="summary">Save</button>
+        <button type="submit" class="btn btn-primary" id="summary"><i style="font-size:24px" class="fa">&#xf0c7;</i></button>
+        <button type="submit" class="btn btn-primary" id="preview"><i class="fa fa-eye" style="font-size:18px"></i></button>
     </div>
 </div>
+<div id="preview_div" class="statusUpdateFormWrapper backGround"></div>
 </body>
 </html>
