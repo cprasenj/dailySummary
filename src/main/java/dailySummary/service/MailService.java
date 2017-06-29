@@ -4,7 +4,9 @@ import dailySummary.constant.StringConstants;
 import dailySummary.contract.Preview;
 import dailySummary.model.DailySummary;
 import dailySummary.model.MailMessage;
+import dailySummary.model.Member;
 import dailySummary.repository.DailySummaryRepository;
+import dailySummary.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -29,6 +31,9 @@ public class MailService {
 
     @Autowired
     private DailySummaryRepository dailySummaryRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     public Boolean sendMail(String receiver) {
         createEmailBodies()
@@ -97,6 +102,14 @@ public class MailService {
                 String formattedDate = formatDate(new Date());
                 helper.setSubject(String.format(StringConstants.SUBJECT, formattedDate));
                 String header = String.format(StringConstants.HEADER, formattedDate);
+                getAllMemberEmail()
+                        .forEach(email -> {
+                            try {
+                                helper.addCc(email);
+                            } catch (MessagingException e1) {
+                                System.out.println("something went wrong");
+                            }
+                        });
                 helper.setText(String.format(StringConstants.BODY, header, body, teamName), true);
                 helper.setTo(e.getKey());
                 return MailMessage.builder()
@@ -108,6 +121,13 @@ public class MailService {
             }
             return null;
         };
+    }
+
+    private List<String> getAllMemberEmail() {
+        return memberRepository.findAll().stream()
+                .map(Member::getMemberEmail)
+                .collect(Collectors.toList());
+
     }
 
     private String draftMailBody(List<DailySummary> summaries) {

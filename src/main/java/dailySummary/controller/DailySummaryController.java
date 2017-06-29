@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class DailySummaryController {
 
@@ -55,5 +57,11 @@ public class DailySummaryController {
     public ResponseEntity getTeamForAUser(@RequestBody RequestByEmail requestByEmail) throws NotAMemberError {
         Member member = dailySummaryService.getTeamForAUser(requestByEmail.getEmailId());
         return new ResponseEntity(member, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getAllMembers", method = RequestMethod.POST)
+    public ResponseEntity getAllMembersForATeam(@RequestBody RequestByEmail requestByEmail) throws NotAMemberError {
+        List<Member> members = dailySummaryService.getAllUsersForATeam(requestByEmail.getEmailId());
+        return new ResponseEntity(members, HttpStatus.OK);
     }
 }

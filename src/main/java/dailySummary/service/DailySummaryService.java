@@ -45,7 +45,7 @@ public class DailySummaryService {
     }
 
     public Member getTeamForAUser(String userEmail) throws NotAMemberError {
-        Member member = null;
+        Member member;
         try{
             member = memberRepository.findAll().stream()
                     .filter(m -> Objects.equals(m.getMemberEmail(), userEmail))
@@ -54,5 +54,9 @@ public class DailySummaryService {
             throw new NotAMemberError();
         }
         return member;
+    }
+
+    public List<Member> getAllUsersForATeam(String emailId) {
+        return memberRepository.findAllMembersByTeamEmail(emailId);
     }
 }
