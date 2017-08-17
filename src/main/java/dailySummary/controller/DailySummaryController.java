@@ -6,6 +6,7 @@ import dailySummary.error.NotAMemberError;
 import dailySummary.model.Member;
 import dailySummary.service.DailySummaryService;
 import dailySummary.service.MailService;
+import dailySummary.validator.AdminUserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,9 @@ public class DailySummaryController {
     @Autowired
     private DailySummaryContractToModelDTO dailySummaryContractToModelDTO;
 
+    @Autowired
+    private AdminUserValidator validator;
+
     @RequestMapping(value = "/dailySummary/save", method = RequestMethod.POST)
     public ResponseEntity getCountryPage(@RequestBody DailySummary summary) {
         dailySummaryService.persistSummary(dailySummaryContractToModelDTO.toDailySummaryModel(summary));
@@ -33,14 +37,22 @@ public class DailySummaryController {
 
     @RequestMapping(value = "/addMember", method = RequestMethod.POST)
     public ResponseEntity addMember(@RequestBody AddMemberRequest addMemberRequest) {
-        dailySummaryService.addMember(dailySummaryContractToModelDTO.toMemberModel(addMemberRequest));
-        return new ResponseEntity(addMemberRequest, HttpStatus.OK);
+        Boolean isAdmin = validator.validate(addMemberRequest.getAdminUserName(), addMemberRequest.getAdminPassword());
+        if(isAdmin) {
+            dailySummaryService.addMember(dailySummaryContractToModelDTO.toMemberModel(addMemberRequest));
+            return new ResponseEntity(addMemberRequest, HttpStatus.OK);
+        }
+        return new ResponseEntity(addMemberRequest, HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/createTeam", method = RequestMethod.POST)
     public ResponseEntity createTeam(@RequestBody AddTeamRequest addTeamRequest) {
-        dailySummaryService.createTeam(dailySummaryContractToModelDTO.toTeamModel(addTeamRequest));
-        return new ResponseEntity(addTeamRequest, HttpStatus.OK);
+        Boolean isAdmin = validator.validate(addTeamRequest.getAdminUserName(), addTeamRequest.getAdminPassword());
+        if(isAdmin) {
+            dailySummaryService.createTeam(dailySummaryContractToModelDTO.toTeamModel(addTeamRequest));
+            return new ResponseEntity(addTeamRequest, HttpStatus.OK);
+        }
+        return new ResponseEntity(addTeamRequest, HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping("/team/getAll")

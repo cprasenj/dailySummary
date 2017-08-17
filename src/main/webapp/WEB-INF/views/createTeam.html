@@ -109,6 +109,31 @@ $(document).ready(function(){
    $("#close_success_popup").click(function(){
        $("#success").addClass("hide");
    });
+
+   var loadAllTeams = function() {
+   var teams = document.getElementById("teams");
+    $.ajax({
+            url:"/team/getAll",
+            type:"GET",
+            dataType:"json",
+            contentType: "application/json; charset=utf-8",
+            success: function(data){
+            var select = document.getElementById("team_email");
+            data.forEach(function(team) {
+                var teamName = team.teamName;
+                var teamEmail = team.teamEmail;
+                var option = document.createElement("option");
+                option.value = teamEmail;
+                option.text = teamName;
+                select.appendChild(option);
+            })
+
+            },
+            error: function() {
+                console.log("something went wrong")
+            }
+        })
+   }();
 })
 
 
@@ -140,7 +165,8 @@ $(document).ready(function(){
         </div>
     </nav>
 </div>
-
+<div class="statusUpdateFormWrapper" id="teams">
+</div>
 <div class="statusUpdateFormWrapper">
     <div class="form-group">
         <div class="form-group jobHeading">

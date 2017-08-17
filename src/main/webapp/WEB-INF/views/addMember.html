@@ -4,7 +4,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 </head>
 <style>
     .statusUpdateFormWrapper {
@@ -63,6 +64,7 @@
     }
 
 
+
 </style>
 
 <script>
@@ -92,7 +94,8 @@ $(document).ready(function(){
         contentType:"application/json; charset=utf-8",
         dataType:"json",
         success: function() {
-            $("#success").removeClass("hide");
+            $("#addMemberDiv").addClass("hide")
+            location.reload();
         },
         error: function() {
             $("#error").removeClass("hide");
@@ -100,6 +103,11 @@ $(document).ready(function(){
     })
 
    });
+
+   $("#openForm").click(function(){
+        $("#addMemberDiv").removeClass("hide");
+        $("#openForm").addClass("hide");
+    });
 
    $("#close_error_popup").click(function(){
         $("#error").addClass("hide");
@@ -109,7 +117,6 @@ $(document).ready(function(){
        $("#success").addClass("hide");
    });
    var renderSelectList = function() {
-    var currentUserEmail = $.cookie("userEmail");
     $.ajax({
             url:"/team/getAll",
             type:"GET",
@@ -125,9 +132,44 @@ $(document).ready(function(){
                     option.text = teamName;
                     select.appendChild(option);
                 })
+                renderMemberList();
             }
         })
    }();
+   var renderMemberList = function() {
+       var teamEmail = document.getElementById("team_email").value
+       var data = {
+        "emailId" : teamEmail
+       }
+       $.ajax({
+        url:"/getAllMembers",
+        contentType:"application/json; charset=utf-8",
+        type:"post",
+        data:JSON.stringify(data),
+        dataType:"json",
+        success: function(responseList) {
+            responseList.forEach(function(member){
+                var memberName = member.memberName || member.memberEmail;
+                var list = document.getElementById("team_members");
+                if(memberName && memberName.length > 0){
+                    var li = document.createElement('li');
+                    li.classList.add("form-control");
+                    li.appendChild(document.createTextNode(memberName));
+                    list.appendChild(li);
+                }
+
+            })
+        },
+        error: function(e) {
+
+        }
+
+       })
+   };
+   $("#team_email").on("change", function() {
+    $("#team_members").empty();
+    renderMemberList();
+   })
 })
 
 
@@ -137,12 +179,14 @@ $(document).ready(function(){
 <body>
 <div class="alert alert-success hide" id="success">
     <strong>Success!</strong> Member added successfully.
-    <button type="submit" class="position-right" id="close_success_popup"><span class="glyphicon glyphicon-remove"></span></button>
+    <button type="submit" class="position-right" id="close_success_popup"><span
+            class="glyphicon glyphicon-remove"></span></button>
 </div>
 
 <div class="alert alert-danger hide" id="error">
     <strong>Error!</strong> Something went wrong. Please try again.
-    <button type="submit" class="position-right" id="close_error_popup"><span class="glyphicon glyphicon-remove"></span></button>
+    <button type="submit" class="position-right" id="close_error_popup"><span class="glyphicon glyphicon-remove"></span>
+    </button>
 </div>
 
 <div class="container">
@@ -167,22 +211,33 @@ $(document).ready(function(){
         <label>Team Name</label>
         <select class="form-control" id="team_email">
         </select>
-        <div class="input-group margin-bottom-sm">
-            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-            <input class="form-control" type="text" placeholder="Member email" id="memberEmail">
-        </div><br/>
-        <div class="form-group jobHeading">
-            <input type="text" class="form-control" placeholder="Member Name" id="memberName">
+        <ul class="" id="team_members">
+
+        </ul>
+        <div class="btn btn-primary " id="openForm"><i class="fa fa-plus" aria-hidden="true"></i>
         </div>
-        <div class="input-group margin-bottom-sm">
-            <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
-            <input class="form-control" type="text" placeholder="Admin user name" id="adminUserName">
-        </div><br/>
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-            <input class="form-control" type="password" placeholder="Password" id="adminPassword">
-        </div><br/>
-        <button type="submit" class="btn btn-primary" id="addMember"><i class="fa fa-plus" aria-hidden="true"></i></button>
+        <div class="hide" id="addMemberDiv">
+            <div class="input-group margin-bottom-sm">
+                <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                <input class="form-control" type="text" placeholder="Member email" id="memberEmail">
+            </div>
+            <br/>
+            <div class="form-group jobHeading">
+                <input type="text" class="form-control" placeholder="Member Name" id="memberName">
+            </div>
+            <div class="input-group margin-bottom-sm">
+                <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                <input class="form-control" type="text" placeholder="Admin user name" id="adminUserName">
+            </div>
+            <br/>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+                <input class="form-control" type="password" placeholder="Password" id="adminPassword">
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-primary" id="addMember"><i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+        </div>
     </div>
 </div>
 </body>
