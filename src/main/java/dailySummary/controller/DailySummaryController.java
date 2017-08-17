@@ -1,9 +1,10 @@
 package dailySummary.controller;
 
 import dailySummary.contract.*;
+import dailySummary.contract.DailySummary;
 import dailySummary.dto.DailySummaryContractToModelDTO;
 import dailySummary.error.NotAMemberError;
-import dailySummary.model.Member;
+import dailySummary.model.*;
 import dailySummary.service.DailySummaryService;
 import dailySummary.service.MailService;
 import dailySummary.validator.AdminUserValidator;
@@ -76,4 +77,18 @@ public class DailySummaryController {
         List<Member> members = dailySummaryService.getAllUsersForATeam(requestByEmail.getEmailId());
         return new ResponseEntity(members, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/getAllJob", method = RequestMethod.POST)
+    public ResponseEntity getAllJobForATeam(@RequestBody RequestByEmail requestByEmail) throws NotAMemberError {
+        List<dailySummary.model.DailySummary> jobs = mailService.getAllJobForATeam(requestByEmail.getEmailId());
+        return new ResponseEntity(jobs, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/upDateJob", method = RequestMethod.POST)
+    public ResponseEntity upDateAllJobForATeam(@RequestBody JobUpdateRequest jobUpdateRequest) throws NotAMemberError {
+        dailySummaryService.updateAllJobForATeam(jobUpdateRequest.getDailySummaryList());
+        return new ResponseEntity(jobUpdateRequest, HttpStatus.OK);
+    }
+
+
 }

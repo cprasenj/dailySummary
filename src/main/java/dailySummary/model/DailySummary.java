@@ -19,4 +19,5 @@ public class DailySummary {
     private Date date;
     private String category;
     private String teamName;
+    private String identity;
 }

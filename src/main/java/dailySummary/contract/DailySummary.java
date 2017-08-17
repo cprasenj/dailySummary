@@ -16,4 +16,5 @@ public class DailySummary {
     private List<String> summary;
     private String category;
     private String teamName;
+    private String identity;
 }

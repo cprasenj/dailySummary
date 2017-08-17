@@ -42,16 +42,20 @@ public class MailService {
     }
 
     public Preview preview(String receiver) {
-        List<DailySummary> toDaySummaryForATeam = dailySummaryRepository.findAll()
-                .stream()
-                .filter(isTodayUpdate())
-                .filter(d -> Objects.equals(d.getTeamEmail(), receiver))
-                .collect(Collectors.toList());
+        List<DailySummary> toDaySummaryForATeam = getDailySummaries(receiver);
 
         String body = draftMailBody(toDaySummaryForATeam);
         String formattedDate = formatDate(new Date());
         String header = String.format(StringConstants.HEADER, formattedDate);
         return Preview.builder().emailBody(String.format(StringConstants.PREVIEW_BODY, header, body, toDaySummaryForATeam.get(0).getTeamName())).build();
+    }
+
+    private List<DailySummary> getDailySummaries(String receiver) {
+        return dailySummaryRepository.findAll()
+                    .stream()
+                    .filter(isTodayUpdate())
+                    .filter(d -> Objects.equals(d.getTeamEmail(), receiver))
+                    .collect(Collectors.toList());
     }
 
     private Consumer<MailMessage> sendMailToRequestedReceiver(String receiver) {
@@ -143,5 +147,9 @@ public class MailService {
                     .collect(joining(""));
             return String.format(StringConstants.UPDATE_SECTION_WITH_HEADER, s.getCategory(), categoriesSummary);
         };
+    }
+
+    public List<DailySummary> getAllJobForATeam(String emailId) {
+        return getDailySummaries(emailId);
     }
 }

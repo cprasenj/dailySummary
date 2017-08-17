@@ -1,5 +1,6 @@
 package dailySummary.service;
 
+import dailySummary.dto.DailySummaryContractToModelDTO;
 import dailySummary.error.NotAMemberError;
 import dailySummary.model.DailySummary;
 import dailySummary.model.Member;
@@ -24,6 +25,9 @@ public class DailySummaryService {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private DailySummaryContractToModelDTO dailySummaryContractToModelDTO;
 
     public Boolean persistSummary(DailySummary dailySummary) {
         dailySummaryRepository.save(dailySummary);
@@ -58,5 +62,18 @@ public class DailySummaryService {
 
     public List<Member> getAllUsersForATeam(String emailId) {
         return memberRepository.findAllMembersByTeamEmail(emailId);
+    }
+
+    public Boolean updateAllJobForATeam(List<dailySummary.contract.DailySummary> dailySummaryList) {
+        dailySummaryList.stream().forEach(s -> {
+            List<DailySummary> byIdentity = dailySummaryRepository.findByIdentity(s.getIdentity());
+            if(byIdentity.size() == 0) {
+                dailySummaryRepository.save(dailySummaryContractToModelDTO.toDailySummaryModel(s));
+            } else {
+                dailySummaryRepository.deleteByIdentity(s.getIdentity());
+                dailySummaryRepository.save(dailySummaryContractToModelDTO.toDailySummaryModel(s));
+            }
+        });
+        return Boolean.TRUE;
     }
 }

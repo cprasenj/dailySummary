@@ -104,6 +104,100 @@ $(document).ready(function(){
             }
         })
    }();
+
+   var renderJobList = function() {
+    var data = {
+        "emailId" : document.getElementById("team_email").value
+    }
+    $.ajax({
+            url:"/getAllJob",
+            type:"POST",
+            contentType:"application/json; charset=utf-8",
+            dataType:"json",
+            data: JSON.stringify(data),
+            success: function(data){
+                var parent = document.getElementById("editJob");
+                data.forEach(function(d) {
+                    var summary = document.createElement("div");
+                    summary.id = d.identity;
+
+                    var jobHeading = document.createElement('div');
+                    jobHeading.classList.add("jobHeading");
+                    jobHeading.classList.add("form-group");
+                    var heading = document.createElement("INPUT");
+                    heading.setAttribute("type", "text");
+                    heading.classList.add("form-control");
+                    heading.value = d.category;
+                    jobHeading.appendChild(heading);
+
+                    summary.appendChild(jobHeading);
+
+                    d.summary.forEach(function(s) {
+                        var description = document.createElement("div");
+                        description.classList.add("jobDesciptionList");
+                        var wrapperDiv = document.createElement("div");
+                        wrapperDiv.classList.add("form-group");
+                        var content = document.createElement("div");
+                        content.classList.add("updateRecord");
+                        var job = document.createElement("INPUT");
+                        job.setAttribute("type", "text");
+                        job.classList.add("form-control");
+                        job.value = s;
+                        content.appendChild(job);
+                        wrapperDiv.appendChild(content);
+                        description.appendChild(wrapperDiv);
+                        summary.appendChild(description);
+                    })
+                    parent.appendChild(summary);
+
+                });
+            },
+            error: function() {
+                console.log("something went wrong")
+            }
+        })
+   };
+
+   $("#edit").click(function(){
+    $("#editJob").removeClass("hide");
+    $("#editJobButton").removeClass("hide");
+    $("#editJob").empty();
+    renderJobList();
+   })
+
+   $("#update").click(function() {
+    var email = document.getElementById("team_email").value;
+    var teamName = $('#team_email :selected').text();
+    var list = [];
+    $("#editJob").children().each(function(div) {
+        var summaryObject = {};
+        summaryObject.teamEmail = email;
+        summaryObject.teamName = teamName;
+        summaryObject.identity = $(this).attr("id");
+        summaryObject.category = $(this).children()[0].children[0].value
+        var summaryList = [];
+        for(i=1;i<=$(this).children().length-1;i++) {
+            summaryList.push($(this).children()[i].children[0].children[0].children[0].value);
+        }
+        summaryObject.summary = summaryList;
+        list.push(summaryObject);
+    })
+    var data = {
+        "dailySummaryList" : list
+    }
+    $.ajax({
+        url:"/upDateJob",
+        type:"POST",
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        data: JSON.stringify(data),
+        success: function() {
+        },
+        error: function() {
+        }
+    })
+   })
+
 });
 
 
@@ -228,7 +322,8 @@ $(document).ready(function(){
         <div class="form-group">
             <label>Team Name</label>
             <select class="form-control" id="team_email">
-            </select></div>
+            </select>
+        </div>
         <div class="form-group jobHeading">
             <input class="form-control" type="text" placeholder="Enter Job Heading" id="category">
         </div>
@@ -242,7 +337,14 @@ $(document).ready(function(){
 
         <button type="submit" class="btn btn-primary" id="summary"><i style="font-size:24px" class="fa">&#xf0c7;</i></button>
         <button type="submit" class="btn btn-primary" id="preview"><i class="fa fa-eye" style="font-size:18px"></i></button>
+        <button type="submit" class="btn btn-primary" id="edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
     </div>
+    <div id="editJob" class="hide">
+    </div>
+    <div id="editJobButton" class="hide">
+        <button type="submit" class="btn btn-primary" id="update">UPDATE</i></button>
+    </div>
+
 </div>
 <div id="preview_div" class="statusUpdateFormWrapper backGround"></div>
 </body>

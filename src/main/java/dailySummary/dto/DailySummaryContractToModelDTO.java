@@ -18,6 +18,8 @@ public class DailySummaryContractToModelDTO {
                 .summary(summary.getSummary())
                 .teamEmail(summary.getTeamEmail())
                 .date(new Date())
+                .identity(summary.getIdentity() == null ?
+                        String.format("%s%s", Long.toString(System.currentTimeMillis()), new Date().toString()) : summary.getIdentity())
                 .category(summary.getCategory())
                 .teamName(summary.getTeamName())
                 .build();
