@@ -35,7 +35,9 @@ $(document).ready(function(){
     $("#sendMail").click(function(){
         window.location = "/sendMail"
     });
-
+    $(".sendButton").click(function(){
+        window.location = "/sendMail"
+    });
     $("#addMember").click(function(){
         window.location = "/addMember"
     });
@@ -51,6 +53,9 @@ $(document).ready(function(){
    })
 
    $("#preview").click(function(){
+   $("#editJobButton").addClass("hide");
+   $("#editJob").addClass("hide");
+   $("#preview_div").removeClass("hide");
         var data = {
             "emailId" : document.getElementById("team_email").value
         }
@@ -159,6 +164,7 @@ $(document).ready(function(){
 
    $("#edit").click(function(){
     $("#editJob").removeClass("hide");
+    $("#preview_div").addClass("hide");
     $("#editJobButton").removeClass("hide");
     $("#editJob").empty();
     renderJobList();
@@ -198,6 +204,7 @@ $(document).ready(function(){
    })
 
 });
+
 
 
 
@@ -299,6 +306,10 @@ $(document).ready(function(){
         height: 200px;
     }
 
+    .sendButton {
+        float:right;
+    }
+
 
     </style>
 </head>
@@ -307,9 +318,10 @@ $(document).ready(function(){
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="brand-centered">
-                <a class="navbar-brand" href=""><img style="margin-right: 10px; padding: 0;"
-                                                     src="http://res.cloudinary.com/dzpzeprjj/image/upload/v1497530014/Current_Kroger_logo.svg_dmdguv.png"
-                                                     alt="Dispute Bills">Daily Summary
+                <a class="navbar-brand" href="">
+                    <img style="margin-right: 10px; padding: 0;"
+                         src="http://res.cloudinary.com/dzpzeprjj/image/upload/v1497530014/Current_Kroger_logo.svg_dmdguv.png"
+                         alt="Dispute Bills">Daily Summary
                 </a>
             </div>
 
@@ -331,6 +343,11 @@ $(document).ready(function(){
 <div class="statusUpdateFormWrapper">
     <div class="form">
         <label>Provide your updates below</label>
+        <!--<input type="text" name="city" list="cityname">-->
+        <!--<datalist id="cityname">-->
+            <!--<option value="Boston">-->
+            <!--<option value="Cambridge">-->
+        <!--</datalist>-->
         <div class="form-group">
             <label>Team Name</label>
             <select class="form-control" id="team_email">
@@ -353,6 +370,10 @@ $(document).ready(function(){
         <button type="submit" class="btn btn-primary" id="preview"><i class="fa fa-eye" style="font-size:18px"></i>
         </button>
         <button type="submit" class="btn btn-primary" id="edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+        <div class="sendButton">
+            <button type="submit" class="btn btn-primary" id="send"><span class="glyphicon glyphicon-send"></span>
+            </button>
+        </div>
     </div>
     <div id="editJob" class="hide">
     </div>

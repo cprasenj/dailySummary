@@ -1,6 +1,5 @@
 package dailySummary.service;
 
-import dailySummary.constant.StringConstants;
 import dailySummary.contract.Preview;
 import dailySummary.model.DailySummary;
 import dailySummary.model.MailMessage;
@@ -21,7 +20,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static dailySummary.constant.StringConstants.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
 public class MailService {
@@ -46,16 +48,18 @@ public class MailService {
 
         String body = draftMailBody(toDaySummaryForATeam);
         String formattedDate = formatDate(new Date());
-        String header = String.format(StringConstants.HEADER, formattedDate);
-        return Preview.builder().emailBody(String.format(StringConstants.PREVIEW_BODY, header, body, toDaySummaryForATeam.get(0).getTeamName())).build();
+        String header = String.format(HEADER, formattedDate);
+        return Preview.builder()
+                .emailBody(String.format(PREVIEW_BODY, header, body, toDaySummaryForATeam.get(0).getTeamName()))
+                .build();
     }
 
     private List<DailySummary> getDailySummaries(String receiver) {
         return dailySummaryRepository.findAll()
-                    .stream()
-                    .filter(isTodayUpdate())
-                    .filter(d -> Objects.equals(d.getTeamEmail(), receiver))
-                    .collect(Collectors.toList());
+                .stream()
+                .filter(isTodayUpdate())
+                .filter(d -> Objects.equals(d.getTeamEmail(), receiver))
+                .collect(Collectors.toList());
     }
 
     private Consumer<MailMessage> sendMailToRequestedReceiver(String receiver) {
@@ -77,7 +81,7 @@ public class MailService {
     }
 
     private String formatDate(Date date) {
-        SimpleDateFormat formatter = new SimpleDateFormat(StringConstants.DATE_PATTERN);
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_PATTERN);
         return formatter.format(date);
     }
 
@@ -104,8 +108,8 @@ public class MailService {
                 MimeMessage message = sender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(message, true);
                 String formattedDate = formatDate(new Date());
-                helper.setSubject(String.format(StringConstants.SUBJECT, formattedDate));
-                String header = String.format(StringConstants.HEADER, formattedDate);
+                helper.setSubject(String.format(SUBJECT, formattedDate));
+                String header = String.format(HEADER, formattedDate);
                 getAllMemberEmail()
                         .forEach(email -> {
                             try {
@@ -114,7 +118,7 @@ public class MailService {
                                 System.out.println("something went wrong");
                             }
                         });
-                helper.setText(String.format(StringConstants.BODY, header, body, teamName), true);
+                helper.setText(String.format(BODY, header, body, teamName), true);
                 helper.setTo(e.getKey());
                 return MailMessage.builder()
                         .message(message)
@@ -135,14 +139,60 @@ public class MailService {
     }
 
     private String draftMailBody(List<DailySummary> summaries) {
-        return summaries.stream()
+        String summary = String.format(UPDATE_SECTION_WITH_HEADER, "Story Updates", summaries.stream()
                 .map(createSummary())
+                .filter(s -> !Objects.equals(s, ""))
+                .collect(joining("")));
+        String openQuestions = summaries.stream()
+                .map(createQuestionSection())
+                .filter(s -> !Objects.equals(s, ""))
                 .collect(joining(""));
+
+        String otherUpdates = summaries.stream()
+                .map(createUpdateSection())
+                .filter(s -> !Objects.equals(s, ""))
+                .collect(joining(""));
+        String questions = section("Open Questions", openQuestions);
+        String updates = section("Other Updates", otherUpdates);
+
+        return String.format("%s%s%s", summary, questions, updates);
     }
 
     private Function<DailySummary, String> createSummary() {
-        return s -> String.format(StringConstants.UPDATE_SECTION_WITH_HEADER, s.getCategory(),
-                String.format(StringConstants.UPDATE, s.getSummary()));
+        return s -> {
+            if (isEmpty(s.getSummary())) {
+                return "";
+            }
+            return String.format(UPDATE_SECTION_WITH_HEADER, s.getCategory(),
+                    String.format(UPDATE, s.getSummary()));
+        };
+    }
+
+    private String section(String header, String section) {
+        if (isEmpty(section)) {
+            return "";
+        }
+        return String.format(UPDATE_SECTION_WITH_HEADER, header, section);
+    }
+
+    private Function<DailySummary, String> createQuestionSection() {
+        return s -> {
+            if (isEmpty(s.getOpenQuestion())) {
+                return "";
+            }
+            return String.format(UPDATE_SECTION_WITH_HEADER, s.getCategory(),
+                    String.format(UPDATE, s.getOpenQuestion()));
+        };
+    }
+
+    private Function<DailySummary, String> createUpdateSection() {
+        return s -> {
+            if (isEmpty(s.getOtherUpdate())) {
+                return "";
+            }
+            return String.format(UPDATE_SECTION_WITH_HEADER, s.getCategory(),
+                    String.format(UPDATE, s.getOtherUpdate()));
+        };
     }
 
     public List<DailySummary> getAllJobForATeam(String emailId) {
