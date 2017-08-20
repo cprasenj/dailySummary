@@ -141,12 +141,8 @@ public class MailService {
     }
 
     private Function<DailySummary, String> createSummary() {
-        return s -> {
-            String categoriesSummary = s.getSummary().stream()
-                    .map(summary -> String.format(StringConstants.UPDATE, summary))
-                    .collect(joining(""));
-            return String.format(StringConstants.UPDATE_SECTION_WITH_HEADER, s.getCategory(), categoriesSummary);
-        };
+        return s -> String.format(StringConstants.UPDATE_SECTION_WITH_HEADER, s.getCategory(),
+                String.format(StringConstants.UPDATE, s.getSummary()));
     }
 
     public List<DailySummary> getAllJobForATeam(String emailId) {

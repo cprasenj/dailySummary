@@ -4,15 +4,19 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script>
 $(document).ready(function(){
     $("#summary").click(function(){
-        var summaryData = [];
-        $(".updateInput").each(function(i, o){summaryData.push(o.value)})
+        var summaryData = $(".updateInput").val();
+        var openQuestion = $(".openQuestion").val();
+        var otherUpdates = $(".otherUpdates").val();
         var data = {
             "teamEmail" : document.getElementById("team_email").value,
             "summary" : summaryData,
+            "openQuestion": openQuestion,
+            "otherUpdates": otherUpdates,
             "category" : document.getElementById("category").value,
             "teamName" : $('#team_email :selected').text()
         }
@@ -41,21 +45,6 @@ $(document).ready(function(){
     $("#switchUser").click(function(){
         window.location = "/"
     });
-
-   $(".jobDesciptionList").on('keypress',function(e){
-
-            var inputEle ='<div class="updateRecord">'+
-            '<input type="text" class="form-control updateInput"  placeholder="Enter Description">'+
-            '<span class="delete-update"><span class="glyphicon glyphicon-remove"></span></div>';
-
-           if(e.keyCode === 13){
-             var ele = e.target;
-             var updateRecord = $(ele).closest(".updateRecord");
-              if(updateRecord.next().length === 0){
-                $(inputEle).insertAfter(updateRecord).find("input").focus();
-              }
-           }
-   })
 
    $(".jobDesciptionList").on("click",".delete-update",function(){
         $(this).closest(".updateRecord").remove();
@@ -124,6 +113,7 @@ $(document).ready(function(){
                     var jobHeading = document.createElement('div');
                     jobHeading.classList.add("jobHeading");
                     jobHeading.classList.add("form-group");
+
                     var heading = document.createElement("INPUT");
                     heading.setAttribute("type", "text");
                     heading.classList.add("form-control");
@@ -132,22 +122,31 @@ $(document).ready(function(){
 
                     summary.appendChild(jobHeading);
 
-                    d.summary.forEach(function(s) {
-                        var description = document.createElement("div");
-                        description.classList.add("jobDesciptionList");
-                        var wrapperDiv = document.createElement("div");
-                        wrapperDiv.classList.add("form-group");
-                        var content = document.createElement("div");
-                        content.classList.add("updateRecord");
-                        var job = document.createElement("INPUT");
-                        job.setAttribute("type", "text");
-                        job.classList.add("form-control");
-                        job.value = s;
-                        content.appendChild(job);
-                        wrapperDiv.appendChild(content);
-                        description.appendChild(wrapperDiv);
-                        summary.appendChild(description);
-                    })
+                    var wrapperDiv = document.createElement("div");
+                    wrapperDiv.classList.add("form-group");
+                    var content = document.createElement("div");
+                    content.classList.add("updateRecord");
+
+                    var job = document.createElement("textarea");
+                    job.classList.add("input1");
+                    job.classList.add("form-control");
+                    job.value = d.summary;
+
+                    var openQuestions = document.createElement("textarea");
+                    openQuestions.classList.add("form-control");
+                    openQuestions.value = d.openQuestion;
+
+                    var otherUpdates = document.createElement("textarea");
+                    otherUpdates.classList.add("form-control");
+                    otherUpdates.value = d.otherUpdate;
+
+                    content.appendChild(job);
+                    content.appendChild(openQuestions);
+                    content.appendChild(otherUpdates);
+
+                    wrapperDiv.appendChild(content);
+                    summary.appendChild(wrapperDiv);
+
                     parent.appendChild(summary);
 
                 });
@@ -175,11 +174,10 @@ $(document).ready(function(){
         summaryObject.teamName = teamName;
         summaryObject.identity = $(this).attr("id");
         summaryObject.category = $(this).children()[0].children[0].value
-        var summaryList = [];
-        for(i=1;i<=$(this).children().length-1;i++) {
-            summaryList.push($(this).children()[i].children[0].children[0].children[0].value);
-        }
-        summaryObject.summary = summaryList;
+        summaryObject.summary = $(this).children()[1].children[0].children[0].value;
+        summaryObject.openQuestion = $(this).children()[1].children[0].children[1].value;
+        summaryObject.otherUpdate = $(this).children()[1].children[0].children[2].value;
+
         list.push(summaryObject);
     })
     var data = {
@@ -192,6 +190,7 @@ $(document).ready(function(){
         dataType:"json",
         data: JSON.stringify(data),
         success: function() {
+            location.reload();
         },
         error: function() {
         }
@@ -199,6 +198,7 @@ $(document).ready(function(){
    })
 
 });
+
 
 
     </script>
@@ -295,6 +295,11 @@ $(document).ready(function(){
       font-family: "Lato";
     }
 
+    textarea.input1 {
+        height: 200px;
+    }
+
+
     </style>
 </head>
 <body>
@@ -302,16 +307,22 @@ $(document).ready(function(){
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="brand-centered">
-                <a class="navbar-brand" href=""><img style="margin-right: 10px; padding: 0;" src="http://res.cloudinary.com/dzpzeprjj/image/upload/v1497530014/Current_Kroger_logo.svg_dmdguv.png" alt="Dispute Bills">Daily Summary
+                <a class="navbar-brand" href=""><img style="margin-right: 10px; padding: 0;"
+                                                     src="http://res.cloudinary.com/dzpzeprjj/image/upload/v1497530014/Current_Kroger_logo.svg_dmdguv.png"
+                                                     alt="Dispute Bills">Daily Summary
                 </a>
             </div>
 
             <div id="navbar9" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#" class="active" id="createTeam"><i class="fa fa-users" aria-hidden="true"></i></a></li>
-                    <li><a href="#" class="active" id="addMember"><i class="fa fa-user-plus" aria-hidden="true"></i></a></li>
-                    <li><a href="#" class="active" id="sendMail"><span class="glyphicon glyphicon-envelope"></span></a></li>
-                    <li><a href="#" class="active" id="switchUser"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                    <li><a href="#" class="active" id="createTeam"><i class="fa fa-users" aria-hidden="true"></i></a>
+                    </li>
+                    <li><a href="#" class="active" id="addMember"><i class="fa fa-user-plus" aria-hidden="true"></i></a>
+                    </li>
+                    <li><a href="#" class="active" id="sendMail"><span class="glyphicon glyphicon-envelope"></span></a>
+                    </li>
+                    <li><a href="#" class="active" id="switchUser"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -319,24 +330,28 @@ $(document).ready(function(){
 </div>
 <div class="statusUpdateFormWrapper">
     <div class="form">
+        <label>Provide your updates below</label>
         <div class="form-group">
             <label>Team Name</label>
             <select class="form-control" id="team_email">
             </select>
         </div>
         <div class="form-group jobHeading">
-            <input class="form-control" type="text" placeholder="Enter Job Heading" id="category">
+            <input class="form-control" type="text" placeholder="Jira Number" id="category">
         </div>
-        <div class="jobDesciptionList">
-            <div class="form-group">
-                <div class="updateRecord">
-                    <input class="form-control updateInput" type="text" placeholder="Job Description">
-                </div>
-            </div><br/>
+        <div class="form-group">
+            <div class="updateRecord">
+                <textarea class="input1 form-control updateInput" placeholder="story updates"></textarea>
+                <textarea class="form-control openQuestion" placeholder="open questions"></textarea>
+                <textarea class="form-control otherUpdates" placeholder="other updates"></textarea>
+            </div>
         </div>
+        <br/>
 
-        <button type="submit" class="btn btn-primary" id="summary"><i style="font-size:24px" class="fa">&#xf0c7;</i></button>
-        <button type="submit" class="btn btn-primary" id="preview"><i class="fa fa-eye" style="font-size:18px"></i></button>
+        <button type="submit" class="btn btn-primary" id="summary"><i style="font-size:24px" class="fa">&#xf0c7;</i>
+        </button>
+        <button type="submit" class="btn btn-primary" id="preview"><i class="fa fa-eye" style="font-size:18px"></i>
+        </button>
         <button type="submit" class="btn btn-primary" id="edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
     </div>
     <div id="editJob" class="hide">

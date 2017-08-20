@@ -16,6 +16,8 @@ public class DailySummaryContractToModelDTO {
     public dailySummary.model.DailySummary toDailySummaryModel(DailySummary summary) {
         return dailySummary.model.DailySummary.builder()
                 .summary(summary.getSummary())
+                .openQuestion(summary.getOpenQuestion())
+                .otherUpdate(summary.getOtherUpdate())
                 .teamEmail(summary.getTeamEmail())
                 .date(new Date())
                 .identity(summary.getIdentity() == null ?

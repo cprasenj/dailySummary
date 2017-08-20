@@ -15,9 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 public class DailySummary {
     private String teamEmail;
-    private List<String> summary;
+    private String summary;
     private Date date;
     private String category;
     private String teamName;
     private String identity;
+    private String openQuestion;
+    private String otherUpdate;
 }
