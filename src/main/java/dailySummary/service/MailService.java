@@ -1,5 +1,6 @@
 package dailySummary.service;
 
+import dailySummary.constant.StringConstants;
 import dailySummary.contract.Preview;
 import dailySummary.model.DailySummary;
 import dailySummary.model.MailMessage;
@@ -110,14 +111,6 @@ public class MailService {
                 String formattedDate = formatDate(new Date());
                 helper.setSubject(String.format(SUBJECT, formattedDate));
                 String header = String.format(HEADER, formattedDate);
-                getAllMemberEmail()
-                        .forEach(email -> {
-                            try {
-                                helper.addCc(email);
-                            } catch (MessagingException e1) {
-                                System.out.println("something went wrong");
-                            }
-                        });
                 helper.setText(String.format(BODY, header, body, teamName), true);
                 helper.setTo(e.getKey());
                 return MailMessage.builder()
