@@ -38,4 +38,10 @@ public class IndexController {
         return "createTeam";
     }
 
+    @RequestMapping("/pairingMatrix")
+    public String pairingMatrix() {
+        return "pairingMatrix";
+    }
+
+
 }

@@ -1,0 +1,228 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <style>
+        {box-sizing: border-box;}
+
+        .wrapper {
+            border: 2px solid #f76707;
+            border-radius: 5px;
+            background-color: #fff4e6;
+        }
+
+        .wrapper > div {
+            border: 2px solid #ffa94d;
+            border-radius: 5px;
+            background-color: #ffd8a8;
+            padding: 1em;
+            color: #d9480f;
+            height:40px;
+            background-repeat:no-repeat;
+            background-position:right;
+            background-size:cover;
+            text-align:right;
+        }
+        .wrapper {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            grid-gap: 10px;
+        }
+        .add {
+            float: left;
+        }
+        .sub {
+            float: right;
+        }
+        .display {
+            margin-left: 35px;
+            width: 31px;
+            font-size: 60px
+        }
+        .blank {
+            background-color: darkgray !important;
+        }
+
+
+    </style>
+    <script>
+        $(document).ready(function(){
+
+            var data = [19411, 19412, 19413, 19414, 19415, 19416, 19417, 19118];
+
+            var gridData = [];
+
+            var pairingData = function(data, element) {
+                $.ajax({
+                  url: "/pairingMatrix/get/" + data.pair1 + "/" + data.pair2,
+                  type:"GET",
+
+                    contentType:"application/json; charset=utf-8",
+                    dataType:"json",
+                    success: function(r) {
+                        if(r.length == 0) {
+                            element.innerHTML = 0;
+                        } else {
+                            element.innerHTML =  r.reduce(function(r, v) {return r + v.days}, 0);
+                            data.value =  r.reduce(function(r, v) {return r + v.days}, 0);
+                        }
+                    },
+                    error: function(e) {
+
+                    }
+                })
+            }
+
+            data.forEach(function(v1, i) {
+                data.forEach(function(v2, j) {
+                    tempData = {
+                        pair1 : data[i],
+                        pair2 : data[j],
+                        key: ""+i+j
+                    }
+                    gridData.push(tempData)
+                })
+            })
+
+            var imgUrl = "https://jigsaw.thoughtworks.net/api/people/";
+
+            var fetchImage = function(employeeId, divClass) {
+                $.ajax({
+                  url: imgUrl + employeeId,
+                  type:"GET",
+                    beforeSend: function(request) {
+                        request.setRequestHeader("Authorization", "d0388b5ee940e385012ab4531953f6e0");
+                    },
+                    contentType:"application/json; charset=utf-8",
+                    dataType:"json",
+                    success: function(d) {
+                        $("." + divClass)[0].style.backgroundImage = "url(" + d.picture.url + ")";
+                    },
+                    error: function(e) {
+
+                    }
+                })
+            }
+
+            var add = function() {
+                var key1 = this.getAttribute('key');
+                var key2 = key1.split("").map(function(k) {return parseInt(k)-1}).join("");
+                var gridElement = gridData.filter(function(d) {
+                    return d.key == key2;
+                })[0];
+                gridElement.value || (gridElement.value = 0);
+                var newVal = gridElement.value + 1;
+                gridElement.value = newVal;
+                gridElement.days = newVal;
+                var data = {pairs: [{pair1:gridElement.pair1, pair2:gridElement.pair2, days:1}]}
+                $.ajax({
+                  url: "/pairingMatrix/save",
+                  type:"POST",
+                  data: JSON.stringify(data),
+                  contentType:"application/json; charset=utf-8",
+                  dataType:"json",
+                  success: function(d) {
+                      $(".display"+key1)[0].innerHTML = newVal;
+                  },
+                  error: function(e) {
+
+                  }
+                })
+
+            }
+
+            var sub = function() {
+                var key1 = this.getAttribute('key');
+                var key2 = key1.split("").map(function(k) {return parseInt(k)-1}).join("");
+                var gridElement = gridData.filter(function(d) {
+                    return d.key == key2;
+                })[0];
+                gridElement.value || (gridElement.value = 0);
+                var newVal = gridElement.value - 1;
+                gridElement.value = newVal;
+                gridElement.days = newVal;
+                var data = {pairs: [{pair1:gridElement.pair1, pair2:gridElement.pair2, days: -1}]}
+                $.ajax({
+                  url: "/pairingMatrix/save",
+                  type:"POST",
+                  data: JSON.stringify(data),
+                  contentType:"application/json; charset=utf-8",
+                  dataType:"json",
+                  success: function(d) {
+                      $(".display"+key1)[0].innerHTML = newVal;
+                  },
+                  error: function(e) {
+
+                  }
+                })
+
+            }
+
+            var createGrid = function() {
+                var end = data.length;
+                var parent = document.getElementsByClassName("wrapper");
+                for (var i=0; i<=data.length; i++) {
+                    for(var j=0; j<=data.length; j++) {
+                        var isImageDiv;
+                        var div = document.createElement("div");
+                        div.classList.add(""+i+j);
+                        if(j == 0 && i!=0) {
+                            fetchImage(data[i-1], ""+i+j);
+                            div.classList.add("y");
+                            div.classList.add(data[i]+"");
+                            isImageDiv = true;
+                        }
+                        if(i == 0 && j!=0) {
+                            fetchImage(data[j-1], ""+i+j)
+                            div.classList.add("x");
+                            div.classList.add(data[j-1]+"");
+                            isImageDiv = true;
+                        }
+                        if(j != 0 && i!=0) {
+                            isImageDiv = false;
+                            if(j<i) {
+                                var btn1 = document.createElement("BUTTON");
+                                btn1.innerHTML = "+";
+                                btn1.classList.add("add")
+                                div.appendChild(btn1);
+
+                                var btn2 = document.createElement("BUTTON");
+                                btn2.innerHTML = "-";
+                                btn2.classList.add("sub")
+                                div.appendChild(btn2);
+
+                                var chDiv = document.createElement("div");
+                                var font = document.createElement("font");
+                                pairingData(gridData.filter(function(d){
+                                    return d.key == ""+(i-1)+(j-1);
+                                })[0], font)
+                                btn1.setAttribute("key", ""+i+j);
+                                btn1.addEventListener("click", add, false);
+                                btn2.setAttribute("key", ""+i+j);
+                                btn2.addEventListener("click", sub, false);
+                                chDiv.appendChild(font);
+                                chDiv.classList.add("display"+i+j);
+                                chDiv.classList.add("display");
+                                div.appendChild(chDiv);
+                            } else {
+                                div.classList.add("blank")
+                            }
+                        }
+                        parent[0].appendChild(div);
+                    }
+                }
+            };
+
+            createGrid();
+        })
+
+
+    </script>
+
+</head>
+<body>
+<div class="wrapper">
+</div>
+</body>
+</html>

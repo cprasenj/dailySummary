@@ -1,6 +1,5 @@
 package dailySummary.service;
 
-import dailySummary.constant.StringConstants;
 import dailySummary.contract.Preview;
 import dailySummary.model.DailySummary;
 import dailySummary.model.MailMessage;
