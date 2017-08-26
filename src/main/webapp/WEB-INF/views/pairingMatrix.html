@@ -71,9 +71,11 @@
                             element.innerHTML = 0;
                         } else {
                             var days = r.reduce(function(r, v) {return r + v.days}, 0);
-                            element.innerHTML =  days;
+                            element.innerHTML =  days < 0 ? 0 : days;
                             data.value =  days;
-                            $($("."+divClass)[0]).css({"background": getGreenToRed((days/4)*100)})
+                            if(days > 0) {
+                                $($("."+divClass)[0]).css({"background": getGreenToRed((days/4)*100)})
+                            }
                         }
                     },
                     error: function(e) {
@@ -131,7 +133,7 @@
                   contentType:"application/json; charset=utf-8",
                   dataType:"json",
                   success: function(d) {
-                      $(".display"+key1)[0].innerHTML = newVal;
+                      $(".display"+key1)[0].innerHTML = newVal < 0 ? 0 : newVal;
                       $("."+key1).css({"background": getGreenToRed((newVal/4)*100)})
                   },
                   error: function(e) {
@@ -149,23 +151,33 @@
                 })[0];
                 gridElement.value || (gridElement.value = 0);
                 var newVal = gridElement.value - 1;
-                gridElement.value = newVal;
-                gridElement.days = newVal;
-                var data = {pairs: [{pair1:gridElement.pair1, pair2:gridElement.pair2, days: -1}]}
-                $.ajax({
-                  url: "/pairingMatrix/save",
-                  type:"POST",
-                  data: JSON.stringify(data),
-                  contentType:"application/json; charset=utf-8",
-                  dataType:"json",
-                  success: function(d) {
-                      $(".display"+key1)[0].innerHTML = newVal;
-                      $("."+key1).css({"background": getGreenToRed((newVal/4)*100)})
-                  },
-                  error: function(e) {
+                if(newVal>=0) {
+                    gridElement.value = newVal;
+                    gridElement.days = newVal;
+                    var data = {pairs: [{pair1:gridElement.pair1, pair2:gridElement.pair2, days: -1}]}
+                    $.ajax({
+                      url: "/pairingMatrix/save",
+                      type:"POST",
+                      data: JSON.stringify(data),
+                      contentType:"application/json; charset=utf-8",
+                      dataType:"json",
+                      success: function(d) {
+                          $(".display"+key1)[0].innerHTML = newVal < 0 ? 0 : newVal;
+                          if(newVal>0) {
+                            $("."+key1).css({"background": getGreenToRed((newVal/4)*100)})
+                          }
+                      },
+                      error: function(e) {
 
-                  }
-                })
+                      }
+                    })
+                } else {
+                    $("."+key1).css({"background-color": "#ffd8a8"});
+                }
+
+                if(newVal==0) {
+                    $("."+key1).css({"background-color": "#ffd8a8"});
+                }
 
             }
 
