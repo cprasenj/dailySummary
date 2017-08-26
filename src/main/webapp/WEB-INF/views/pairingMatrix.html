@@ -49,11 +49,17 @@
     <script>
         $(document).ready(function(){
 
-            var data = [19411, 19412, 19413, 19414, 19415, 19416, 19417, 19118];
+            var data = [19411, 19506, 20693, 11323, 15930, 20512, 16611, 19663];
 
             var gridData = [];
 
-            var pairingData = function(data, element) {
+            function getGreenToRed(percent){
+                r = percent<50 ? 255 : Math.floor(255-(percent*2-100)*255/100);
+                g = percent>50 ? 255 : Math.floor((percent*2)*255/100);
+                return 'rgb('+g+','+r+',0)';
+            }
+
+            var pairingData = function(data, element, divClass) {
                 $.ajax({
                   url: "/pairingMatrix/get/" + data.pair1 + "/" + data.pair2,
                   type:"GET",
@@ -64,8 +70,10 @@
                         if(r.length == 0) {
                             element.innerHTML = 0;
                         } else {
-                            element.innerHTML =  r.reduce(function(r, v) {return r + v.days}, 0);
-                            data.value =  r.reduce(function(r, v) {return r + v.days}, 0);
+                            var days = r.reduce(function(r, v) {return r + v.days}, 0);
+                            element.innerHTML =  days;
+                            data.value =  days;
+                            $($("."+divClass)[0]).css({"background": getGreenToRed((days/4)*100)})
                         }
                     },
                     error: function(e) {
@@ -124,6 +132,7 @@
                   dataType:"json",
                   success: function(d) {
                       $(".display"+key1)[0].innerHTML = newVal;
+                      $("."+key1).css({"background": getGreenToRed((newVal/4)*100)})
                   },
                   error: function(e) {
 
@@ -151,6 +160,7 @@
                   dataType:"json",
                   success: function(d) {
                       $(".display"+key1)[0].innerHTML = newVal;
+                      $("."+key1).css({"background": getGreenToRed((newVal/4)*100)})
                   },
                   error: function(e) {
 
@@ -196,7 +206,7 @@
                                 var font = document.createElement("font");
                                 pairingData(gridData.filter(function(d){
                                     return d.key == ""+(i-1)+(j-1);
-                                })[0], font)
+                                })[0], font, ""+i+j)
                                 btn1.setAttribute("key", ""+i+j);
                                 btn1.addEventListener("click", add, false);
                                 btn2.setAttribute("key", ""+i+j);
