@@ -97,22 +97,19 @@
 
             var imgUrl = "https://jigsaw.thoughtworks.net/api/people/";
 
-            var fetchImage = function(employeeId, divClass) {
-                $.ajax({
-                  url: imgUrl + employeeId,
-                  type:"GET",
-                    beforeSend: function(request) {
-                        request.setRequestHeader("Authorization", "d0388b5ee940e385012ab4531953f6e0");
-                    },
-                    contentType:"application/json; charset=utf-8",
-                    dataType:"json",
-                    success: function(d) {
-                        $("." + divClass)[0].style.backgroundImage = "url(" + d.picture.url + ")";
-                    },
-                    error: function(e) {
+            var imgUrls = {
+                "19411": "http://res.cloudinary.com/dzpzeprjj/image/upload/v1504528274/19411_qbdnh2.png",
+                "19506": "http://res.cloudinary.com/dzpzeprjj/image/upload/v1504528447/19560_lk3xx5.jpg",
+                "20693": "http://res.cloudinary.com/dzpzeprjj/image/upload/v1504528573/20693_ax64hu.jpg",
+                "11323": "http://res.cloudinary.com/dzpzeprjj/image/upload/v1504528650/11323_bzukkb.png",
+                "15930": "http://res.cloudinary.com/dzpzeprjj/image/upload/v1504528726/15930_y32opk.png",
+                "20512": "http://res.cloudinary.com/dzpzeprjj/image/upload/v1504528774/20512_x39p5m.jpg",
+                "16611": "http://res.cloudinary.com/dzpzeprjj/image/upload/v1504528841/16611_haavvm.jpg",
+                "19663": "http://res.cloudinary.com/dzpzeprjj/image/upload/v1504528893/19663_ib1ap7.jpg"
+            }
 
-                    }
-                })
+            var fetchImage = function(employeeId, divClass) {
+                $("." + divClass)[0].style.backgroundImage = "url(" + imgUrls[""+employeeId] + ")";
             }
 
             var add = function() {
