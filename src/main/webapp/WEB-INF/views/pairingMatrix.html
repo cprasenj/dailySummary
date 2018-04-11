@@ -14,11 +14,11 @@
 
         .wrapper > div {
             border: 2px solid #ffa94d;
-            border-radius: 5px;
+            border-radius: 5%;
             background-color: #ffd8a8;
-            padding: 1em;
+            padding: 0.8em;
             color: #d9480f;
-            height:40px;
+            height:2.5em;
             background-repeat:no-repeat;
             background-position:right;
             background-size:cover;
@@ -27,7 +27,7 @@
         .wrapper {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
-            grid-gap: 9px;
+            grid-gap: 0.5em;
         }
         .add {
             float: left;
@@ -36,9 +36,10 @@
             float: right;
         }
         .display {
-            margin-left: 35px;
-            width: 31px;
-            font-size: 60px
+            margin-left: 1em;
+            width: 1em;
+            font-size: 2.5em;
+            text-align: center;
         }
         .blank {
             background-color: darkgray !important;
@@ -74,7 +75,7 @@
                             element.innerHTML =  days < 0 ? 0 : days;
                             data.value =  days;
                             if(days > 0) {
-                                $($("."+divClass)[0]).css({"background": getGreenToRed((days/4)*100)})
+                                $($("."+divClass)[0]).css({"background": getGreenToRed((days/10)*100)})
                             }
                         }
                     },
