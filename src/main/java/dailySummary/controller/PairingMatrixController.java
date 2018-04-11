@@ -24,4 +24,9 @@ public class PairingMatrixController {
                                            ) {
         return new ResponseEntity(pairingMatrixService.get(pair1, pair2), HttpStatus.OK);
     }
+
+    @RequestMapping("/getAll")
+    public ResponseEntity getDBDDump() {
+       return new ResponseEntity(pairingMatrixService.getDump(), HttpStatus.OK);
+    }
 }

@@ -24,8 +24,12 @@ public class PairingMatrixService {
     public List<Pair> get(String pair1, String pair2) {
         List<Pair> byPair1AndPair2 = pairingMatrixRepository.getByPair1AndPair2(pair1, pair2);
         return byPair1AndPair2.stream()
-                .filter(p -> LocalDateTime.now().getDayOfYear() - p.getDate().getDayOfYear() <= 10)
+                .filter(p -> LocalDateTime.now().getDayOfYear() - p.getDate().getDayOfYear() <= 30)
                 .collect(toList());
 
+    }
+
+    public List getDump() {
+        return pairingMatrixRepository.findAll();
     }
 }
