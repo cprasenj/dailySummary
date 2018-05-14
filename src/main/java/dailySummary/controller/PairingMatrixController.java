@@ -25,6 +25,13 @@ public class PairingMatrixController {
         return new ResponseEntity(pairingMatrixService.get(pair1, pair2), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/pairingMatrix/v2/get/{pair1}/{pair2}")
+    public ResponseEntity getPairingMatrixV2(@PathVariable("pair1") String pair1,
+                                           @PathVariable("pair2") String pair2
+    ) {
+        return new ResponseEntity(pairingMatrixService.getV2(pair1, pair2), HttpStatus.OK);
+    }
+
     @RequestMapping("/getAll")
     public ResponseEntity getDBDDump() {
        return new ResponseEntity(pairingMatrixService.getDump(), HttpStatus.OK);
