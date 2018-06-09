@@ -39,22 +39,14 @@ public class DailySummaryController {
 
     @RequestMapping(value = "/addMember", method = RequestMethod.POST)
     public ResponseEntity addMember(@RequestBody AddMemberRequest addMemberRequest) {
-//        Boolean isAdmin = validator.validate(addMemberRequest.getAdminUserName(), addMemberRequest.getAdminPassword());
-//        if(isAdmin) {
-            dailySummaryService.addMember(dailySummaryContractToModelDTO.toMemberModel(addMemberRequest));
-            return new ResponseEntity(addMemberRequest, HttpStatus.OK);
-//        }
-//        return new ResponseEntity(addMemberRequest, HttpStatus.BAD_REQUEST);
+        dailySummaryService.addMember(dailySummaryContractToModelDTO.toMemberModel(addMemberRequest));
+        return new ResponseEntity(addMemberRequest, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/createTeam", method = RequestMethod.POST)
     public ResponseEntity createTeam(@RequestBody AddTeamRequest addTeamRequest) {
-//        Boolean isAdmin = validator.validate(addTeamRequest.getAdminUserName(), addTeamRequest.getAdminPassword());
-//        if(isAdmin) {
-            dailySummaryService.createTeam(dailySummaryContractToModelDTO.toTeamModel(addTeamRequest));
-            return new ResponseEntity(addTeamRequest, HttpStatus.OK);
-//        }
-//        return new ResponseEntity(addTeamRequest, HttpStatus.BAD_REQUEST);
+        dailySummaryService.createTeam(dailySummaryContractToModelDTO.toTeamModel(addTeamRequest));
+        return new ResponseEntity(addTeamRequest, HttpStatus.OK);
     }
 
     @RequestMapping("/team/getAll")

@@ -56,21 +56,17 @@ public class PairingMatrixService {
 
     }
 
+    private Integer countPairingDays(List<PairingMatrixData> dataList) {
+        return dataList.stream()
+                .filter(p -> LocalDateTime.now().getDayOfYear() - p.getDate().getDayOfYear() <= 30)
+                .map(PairingMatrixData::getDays)
+                .reduce((d1, d2) -> d1 + d2)
+                .orElse(0);
+    }
+
     public Summary getV2(String pair1, String pair2) {
-        List<PairingMatrixData> byPair1AndPair2 = pairingMatrixRepository.getByPair1AndPair2(pair1, pair2);
-        List<PairingMatrixData> byPair2AndPair1 = pairingMatrixRepository.getByPair1AndPair2(pair2, pair1);
-
-        Integer count1 = byPair1AndPair2.stream()
-                .filter(p -> LocalDateTime.now().getDayOfYear() - p.getDate().getDayOfYear() <= 30)
-                .map(PairingMatrixData::getDays)
-                .reduce((d1, d2) -> d1 + d2)
-                .orElse(0);
-
-        Integer count2 = byPair2AndPair1.stream()
-                .filter(p -> LocalDateTime.now().getDayOfYear() - p.getDate().getDayOfYear() <= 30)
-                .map(PairingMatrixData::getDays)
-                .reduce((d1, d2) -> d1 + d2)
-                .orElse(0);
+        Integer count1 = countPairingDays(pairingMatrixRepository.getByPair1AndPair2(pair1, pair2));
+        Integer count2 = countPairingDays(pairingMatrixRepository.getByPair1AndPair2(pair2, pair1));
 
         long count = Objects.equals(pair1, pair2) ? count1 : count1 + count2;
 
