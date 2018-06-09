@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class DailySummaryController {
 
     @Autowired
@@ -38,22 +39,22 @@ public class DailySummaryController {
 
     @RequestMapping(value = "/addMember", method = RequestMethod.POST)
     public ResponseEntity addMember(@RequestBody AddMemberRequest addMemberRequest) {
-        Boolean isAdmin = validator.validate(addMemberRequest.getAdminUserName(), addMemberRequest.getAdminPassword());
-        if(isAdmin) {
+//        Boolean isAdmin = validator.validate(addMemberRequest.getAdminUserName(), addMemberRequest.getAdminPassword());
+//        if(isAdmin) {
             dailySummaryService.addMember(dailySummaryContractToModelDTO.toMemberModel(addMemberRequest));
             return new ResponseEntity(addMemberRequest, HttpStatus.OK);
-        }
-        return new ResponseEntity(addMemberRequest, HttpStatus.BAD_REQUEST);
+//        }
+//        return new ResponseEntity(addMemberRequest, HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/createTeam", method = RequestMethod.POST)
     public ResponseEntity createTeam(@RequestBody AddTeamRequest addTeamRequest) {
-        Boolean isAdmin = validator.validate(addTeamRequest.getAdminUserName(), addTeamRequest.getAdminPassword());
-        if(isAdmin) {
+//        Boolean isAdmin = validator.validate(addTeamRequest.getAdminUserName(), addTeamRequest.getAdminPassword());
+//        if(isAdmin) {
             dailySummaryService.createTeam(dailySummaryContractToModelDTO.toTeamModel(addTeamRequest));
             return new ResponseEntity(addTeamRequest, HttpStatus.OK);
-        }
-        return new ResponseEntity(addTeamRequest, HttpStatus.BAD_REQUEST);
+//        }
+//        return new ResponseEntity(addTeamRequest, HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping("/team/getAll")
@@ -61,14 +62,14 @@ public class DailySummaryController {
         return new ResponseEntity(TeamResponse.builder().teams(dailySummaryService.getAllTeams()).build(), HttpStatus.OK);
     }
     @RequestMapping(value = "/preview", method = RequestMethod.POST)
-    public ResponseEntity getMailPreviewForATeam(@RequestBody RequestByEmail requestByEmail) {
-        return new ResponseEntity(mailService.preview(requestByEmail.getEmailId()), HttpStatus.OK);
+    public ResponseEntity getMailPreviewForATeam(@RequestBody RequestById requestById) {
+        return new ResponseEntity(mailService.preview(requestById.getId()), HttpStatus.OK);
     }
 
 
     @RequestMapping(value = "/team", method = RequestMethod.POST)
-    public ResponseEntity getTeamForAUser(@RequestBody RequestByEmail requestByEmail) throws NotAMemberError {
-        Member member = dailySummaryService.getTeamForAUser(requestByEmail.getEmailId());
+    public ResponseEntity getTeamForAUser(@RequestBody RequestById requestById) throws NotAMemberError {
+        Member member = dailySummaryService.getTeamForAUser(requestById.getId());
         return new ResponseEntity(member, HttpStatus.OK);
     }
 
@@ -79,8 +80,8 @@ public class DailySummaryController {
     }
 
     @RequestMapping(value = "/getAllJob", method = RequestMethod.POST)
-    public ResponseEntity getAllJobForATeam(@RequestBody RequestByEmail requestByEmail) throws NotAMemberError {
-        List<dailySummary.model.DailySummary> jobs = mailService.getAllJobForATeam(requestByEmail.getEmailId());
+    public ResponseEntity getAllJobForATeam(@RequestBody RequestById requestById) throws NotAMemberError {
+        List<dailySummary.model.DailySummary> jobs = mailService.getAllJobForATeam(requestById.getId());
         return new ResponseEntity(jobs, HttpStatus.OK);
     }
 

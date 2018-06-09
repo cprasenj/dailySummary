@@ -106,7 +106,7 @@ $(document).ready(function(){
     });
     $("#preview").click(function(){
         var data = {
-            "emailId" : document.getElementById("receiver").value
+            "id" : document.getElementById("receiver").value
         }
         $.ajax({
             url: "/preview",

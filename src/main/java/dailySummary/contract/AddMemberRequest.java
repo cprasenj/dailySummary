@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 public class AddMemberRequest {
     private String memberEmail;
     private String memberName;
+    private String memberId;
     private String teamName;
+    private String teamId;
     private String teamEmail;
     private String adminUserName;
     private String adminPassword;

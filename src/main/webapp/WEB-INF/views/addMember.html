@@ -139,7 +139,7 @@ $(document).ready(function(){
    var renderMemberList = function() {
        var teamEmail = document.getElementById("team_email").value
        var data = {
-        "emailId" : teamEmail
+        "id" : teamEmail
        }
        $.ajax({
         url:"/getAllMembers",

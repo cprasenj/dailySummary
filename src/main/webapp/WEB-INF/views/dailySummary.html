@@ -57,7 +57,7 @@ $(document).ready(function(){
    $("#editJob").addClass("hide");
    $("#preview_div").removeClass("hide");
         var data = {
-            "emailId" : document.getElementById("team_email").value
+            "id" : document.getElementById("team_email").value
         }
         $.ajax({
             url: "/preview",
@@ -75,7 +75,7 @@ $(document).ready(function(){
 
    var renderSelectList = function() {
     var data = {
-        "emailId" : localStorage.userEmail
+        "id" : localStorage.userEmail
     }
     $.ajax({
             url:"/team",
@@ -101,7 +101,7 @@ $(document).ready(function(){
 
    var renderJobList = function() {
     var data = {
-        "emailId" : document.getElementById("team_email").value
+        "id" : document.getElementById("team_email").value
     }
     $.ajax({
             url:"/getAllJob",

@@ -14,4 +14,6 @@ public class Member {
     private String memberName;
     private String teamName;
     private String teamEmail;
+    private String memberId;
+    private String teamId;
 }

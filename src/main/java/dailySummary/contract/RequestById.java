@@ -1,15 +1,14 @@
 package dailySummary.contract;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PairMatrixRequest {
-    private String teamEmail;
-    private List<Pair> pairs;
+public class RequestById {
+    private String id;
 }

@@ -32,7 +32,9 @@ public class DailySummaryContractToModelDTO {
                 .memberEmail(addMemberRequest.getMemberEmail())
                 .memberName(addMemberRequest.getMemberName())
                 .teamName(addMemberRequest.getTeamName())
+                .memberId(addMemberRequest.getMemberId())
                 .teamEmail(addMemberRequest.getTeamEmail())
+                .teamId(addMemberRequest.getTeamId())
                 .build();
     }
 
@@ -40,6 +42,7 @@ public class DailySummaryContractToModelDTO {
         return Team.builder()
                 .teamName(addTeamRequest.getTeamName())
                 .teamEmail(addTeamRequest.getTeamEmail())
+                .teamId(String.valueOf(java.util.UUID.randomUUID()))
                 .build();
 
     }

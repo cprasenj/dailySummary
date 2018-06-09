@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
 public class PairingMatrixController {
     @Autowired
     private PairingMatrixService pairingMatrixService;
@@ -23,6 +24,12 @@ public class PairingMatrixController {
                                            @PathVariable("pair2") String pair2
                                            ) {
         return new ResponseEntity(pairingMatrixService.get(pair1, pair2), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/pairingMatrix/v2/get")
+    public ResponseEntity getPairingMatrixForaTeam(@RequestParam("teamEmail") String teamEmail) {
+
+        return new ResponseEntity(pairingMatrixService.getByTeamId(teamEmail), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/pairingMatrix/v2/get/{pair1}/{pair2}")
