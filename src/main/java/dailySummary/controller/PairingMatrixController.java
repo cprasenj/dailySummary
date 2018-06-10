@@ -8,18 +8,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
 public class PairingMatrixController {
     @Autowired
     private PairingMatrixService pairingMatrixService;
 
     @RequestMapping(value = "/pairingMatrix/save", method = RequestMethod.POST)
+    @CrossOrigin
     public ResponseEntity savePairingMatrix(@RequestBody PairMatrixRequest pairMatrixRequest) {
         pairingMatrixService.persistMatrix(pairMatrixRequest);
         return new ResponseEntity(pairMatrixRequest, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/pairingMatrix/get/{pair1}/{pair2}")
+    @CrossOrigin
     public ResponseEntity getPairingMatrix(@PathVariable("pair1") String pair1,
                                            @PathVariable("pair2") String pair2
                                            ) {
@@ -27,12 +28,14 @@ public class PairingMatrixController {
     }
 
     @RequestMapping(value = "/pairingMatrix/v2/get")
+    @CrossOrigin
     public ResponseEntity getPairingMatrixForaTeam(@RequestParam("teamEmail") String teamEmail) {
 
         return new ResponseEntity(pairingMatrixService.getByTeamId(teamEmail), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/pairingMatrix/v2/get/{pair1}/{pair2}")
+    @CrossOrigin
     public ResponseEntity getPairingMatrixV2(@PathVariable("pair1") String pair1,
                                            @PathVariable("pair2") String pair2
     ) {
@@ -40,6 +43,7 @@ public class PairingMatrixController {
     }
 
     @RequestMapping("/getAll")
+    @CrossOrigin
     public ResponseEntity getDBDDump() {
        return new ResponseEntity(pairingMatrixService.getDump(), HttpStatus.OK);
     }
