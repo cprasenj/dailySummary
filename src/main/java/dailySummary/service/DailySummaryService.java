@@ -1,5 +1,6 @@
 package dailySummary.service;
 
+import dailySummary.contract.DeleteTeamRequest;
 import dailySummary.dto.DailySummaryContractToModelDTO;
 import dailySummary.error.NotAMemberError;
 import dailySummary.model.DailySummary;
@@ -75,5 +76,9 @@ public class DailySummaryService {
             }
         });
         return Boolean.TRUE;
+    }
+
+    public void deleteTeam(DeleteTeamRequest deleteTeamRequest) {
+        teamRepository.deleteTeamByTeamEmail(deleteTeamRequest.getTeamEmail());
     }
 }
