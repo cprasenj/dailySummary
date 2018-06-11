@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface MemberRepository extends MongoRepository<Member, String> {
     List<Member> findAllMembersByTeamEmail(String teamEmail);
+    void deleteMemberByTeamEmail(String teamEmail);
 }

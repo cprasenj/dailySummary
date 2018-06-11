@@ -44,6 +44,12 @@ public class DailySummaryController {
         return new ResponseEntity(addMemberRequest, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/deleteMember", method = RequestMethod.POST)
+    public ResponseEntity deleteMember(@RequestBody DeleteMemberRequest deleteMemberRequest) {
+        dailySummaryService.deleteMember(deleteMemberRequest);
+        return new ResponseEntity(deleteMemberRequest, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/createTeam", method = RequestMethod.POST)
     @CrossOrigin
     public ResponseEntity createTeam(@RequestBody AddTeamRequest addTeamRequest) {
