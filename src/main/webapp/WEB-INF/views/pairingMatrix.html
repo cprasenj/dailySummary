@@ -141,7 +141,7 @@
                 gridElement.days = newVal;
                 var data = {pairs: [{pair1:gridElement.pair1, pair2:gridElement.pair2, days:1}]}
                 $.ajax({
-                  url: "/pairingMatrix/save",
+                  url: "/pairingMatrix/save_old",
                   type:"POST",
                   data: JSON.stringify(data),
                   contentType:"application/json; charset=utf-8",
@@ -170,7 +170,7 @@
                     gridElement.days = newVal;
                     var data = {pairs: [{pair1:gridElement.pair1, pair2:gridElement.pair2, days: -1}]}
                     $.ajax({
-                      url: "/pairingMatrix/save",
+                      url: "/pairingMatrix/save_old",
                       type:"POST",
                       data: JSON.stringify(data),
                       contentType:"application/json; charset=utf-8",

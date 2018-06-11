@@ -21,7 +21,7 @@ $(document).ready(function(){
             "teamName" : $('#team_email :selected').text()
         }
         $.ajax({
-            url:"/dailySummary/save_old",
+            url:"/dailySummary/save",
             type:"POST",
             data:JSON.stringify(data),
             contentType:"application/json; charset=utf-8",
