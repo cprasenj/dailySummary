@@ -6,6 +6,7 @@ import dailySummary.dto.Summary;
 import dailySummary.model.Member;
 import dailySummary.model.PairingMatrixData;
 import dailySummary.repository.MemberRepository;
+import dailySummary.repository.PairingMatrixOldRepository;
 import dailySummary.repository.PairingMatrixRepository;
 import dailySummary.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class PairingMatrixService {
     private PairingMatrixRepository pairingMatrixRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private PairingMatrixOldRepository pairingMatrixOldRepository;
 
     public Boolean persistMatrix(PairMatrixRequest pairMatrixRequest) {
         pairMatrixRequest.getPairs().forEach(p -> pairingMatrixRepository.save(p.toDomain(pairMatrixRequest.getTeamEmail())));
@@ -34,7 +37,7 @@ public class PairingMatrixService {
     }
 
     public List<PairingMatrixData> get(String pair1, String pair2) {
-        List<PairingMatrixData> byPair1AndPair2 = pairingMatrixRepository.getByPair1AndPair2(pair1, pair2);
+        List<PairingMatrixData> byPair1AndPair2 = pairingMatrixOldRepository.getByPair1AndPair2(pair1, pair2);
         return byPair1AndPair2.stream()
                 .filter(p -> LocalDateTime.now().getDayOfYear() - p.getDate().getDayOfYear() <= 30)
                 .collect(toList());
