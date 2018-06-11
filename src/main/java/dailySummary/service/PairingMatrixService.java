@@ -37,12 +37,13 @@ public class PairingMatrixService {
     }
 
     public Boolean persistMatrixOld(PairMatrixRequest pairMatrixRequest) {
-        pairMatrixRequest.getPairs().forEach(p -> pairingMatrixOldRepository.save(p));
+        pairMatrixRequest.getPairs().forEach(p -> pairingMatrixOldRepository
+                .save(new Pair(p.getPair1(), p.getPair2(), p.getDays(), LocalDateTime.now())));
         return true;
     }
 
-    public List<PairingMatrixData> get(String pair1, String pair2) {
-        List<PairingMatrixData> byPair1AndPair2 = pairingMatrixOldRepository.getByPair1AndPair2(pair1, pair2);
+    public List<Pair> get(String pair1, String pair2) {
+        List<Pair> byPair1AndPair2 = pairingMatrixOldRepository.getByPair1AndPair2(pair1, pair2);
         return byPair1AndPair2.stream()
                 .filter(p -> LocalDateTime.now().getDayOfYear() - p.getDate().getDayOfYear() <= 30)
                 .collect(toList());
