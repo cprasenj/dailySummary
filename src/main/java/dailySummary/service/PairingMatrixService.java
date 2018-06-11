@@ -36,6 +36,11 @@ public class PairingMatrixService {
         return true;
     }
 
+    public Boolean persistMatrixOld(PairMatrixRequest pairMatrixRequest) {
+        pairMatrixRequest.getPairs().forEach(p -> pairingMatrixOldRepository.save(p));
+        return true;
+    }
+
     public List<PairingMatrixData> get(String pair1, String pair2) {
         List<PairingMatrixData> byPair1AndPair2 = pairingMatrixOldRepository.getByPair1AndPair2(pair1, pair2);
         return byPair1AndPair2.stream()

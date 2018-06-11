@@ -19,6 +19,13 @@ public class PairingMatrixController {
         return new ResponseEntity(pairMatrixRequest, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/pairingMatrix/save_old", method = RequestMethod.POST)
+    @CrossOrigin
+    public ResponseEntity savePairingMatrixOld(@RequestBody PairMatrixRequest pairMatrixRequest) {
+        pairingMatrixService.persistMatrixOld(pairMatrixRequest);
+        return new ResponseEntity(pairMatrixRequest, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/pairingMatrix/get/{pair1}/{pair2}")
     @CrossOrigin
     public ResponseEntity getPairingMatrix(@PathVariable("pair1") String pair1,
