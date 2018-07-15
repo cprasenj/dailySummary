@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface PairingMatrixRepository extends MongoRepository<PairingMatrixData, String> {
     List<PairingMatrixData> getByPair1AndPair2(String pair1, String pair2);
+
+    PairingMatrixData findFirstByTeamEmailOrderByDateDesc(String teamEmail);
 }

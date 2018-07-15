@@ -8,17 +8,14 @@ import dailySummary.model.PairingMatrixData;
 import dailySummary.repository.MemberRepository;
 import dailySummary.repository.PairingMatrixOldRepository;
 import dailySummary.repository.PairingMatrixRepository;
-import dailySummary.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -80,6 +77,11 @@ public class PairingMatrixService {
 
         return new Summary(pair1, pair2, String.valueOf(count));
 
+    }
+
+    public String getLastUpdatedTime(String teamEmail) {
+        PairingMatrixData data = pairingMatrixRepository.findFirstByTeamEmailOrderByDateDesc(teamEmail);
+        return data.getDate().toString();
     }
 
     public List getDump() {
