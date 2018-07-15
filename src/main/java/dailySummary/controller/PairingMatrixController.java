@@ -49,6 +49,12 @@ public class PairingMatrixController {
         return new ResponseEntity(pairingMatrixService.getV2(pair1, pair2), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/pairingMatrix/v2/get/last-updated-time")
+    @CrossOrigin
+    public ResponseEntity getLastUpdatedTime(@RequestParam("teamEmail") String teamEmail) {
+        return new ResponseEntity(pairingMatrixService.getLastUpdatedTime(teamEmail), HttpStatus.OK);
+    }
+
     @RequestMapping("/getAll")
     @CrossOrigin
     public ResponseEntity getDBDDump() {
