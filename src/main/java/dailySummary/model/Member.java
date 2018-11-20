@@ -16,4 +16,5 @@ public class Member {
     private String teamEmail;
     private String memberId;
     private String teamId;
+    private Boolean active;
 }
