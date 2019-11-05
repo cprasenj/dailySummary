@@ -1,0 +1,240 @@
+{
+  "8989": [
+    {
+      "tenantId": "f6adf6a4-7d13-4485-87dd-f78d5997543c",
+      "siteId": "novio",
+      "version": "string",
+      "orderNumber": "8989",
+      "accountId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "totalOrderPrice": {
+        "currency": "string",
+        "centAmount": 0,
+        "fraction": 0
+      },
+      "totalTax": {
+        "currency": "string",
+        "centAmount": 0,
+        "fraction": 0
+      },
+      "billingAddress": {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "name": {
+          "salutation": "string",
+          "firstName": "string",
+          "middleName": "string",
+          "lastName": "string",
+          "suffix": "string"
+        },
+        "houseNum": "string",
+        "buildingName": "string",
+        "streetName": "string",
+        "streetNumber": "string",
+        "municipal": "string",
+        "city": "string",
+        "state": "string",
+        "region": "string",
+        "country": "string",
+        "postCode": "string",
+        "phoneNumber": {
+          "type": "string",
+          "number": "string",
+          "isVerified": true
+        },
+        "fax": {
+          "type": "string",
+          "number": "string",
+          "isVerified": true
+        },
+        "addressLine1": "string",
+        "addressLine2": "string",
+        "addressLine3": "string",
+        "addressType": "string",
+        "linkedId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "audit": {
+          "apiVerUsed": "v1",
+          "createdBy": "d9542a93-d61e-411e-a198-d460ad1ddb53",
+          "createdAt": "2019-10-25T07:14:01.161174",
+          "lastModifiedBy": "49b368ba-644f-4b55-bfd4-46533ed91e7f",
+          "lastModifiedAt": "2019-10-25T07:14:01.161264"
+        },
+        "email": "string"
+      },
+      "shippingAddress": {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "name": {
+          "salutation": "string",
+          "firstName": "string",
+          "middleName": "string",
+          "lastName": "string",
+          "suffix": "string"
+        },
+        "houseNum": "string",
+        "buildingName": "string",
+        "streetName": "string",
+        "streetNumber": "string",
+        "municipal": "string",
+        "city": "string",
+        "state": "string",
+        "region": "string",
+        "country": "string",
+        "postCode": "string",
+        "phoneNumber": {
+          "type": "string",
+          "number": "string",
+          "isVerified": true
+        },
+        "fax": {
+          "type": "string",
+          "number": "string",
+          "isVerified": true
+        },
+        "addressLine1": "string",
+        "addressLine2": "string",
+        "addressLine3": "string",
+        "addressType": "string",
+        "linkedId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "audit": {
+          "apiVerUsed": "string",
+          "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "createdAt": "2019-10-15T04:53:55.228",
+          "lastModifiedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "lastModifiedAt": "2019-10-15T04:53:55.228"
+        },
+        "email": "string"
+      },
+      "invoice": {
+        "invoiceType": "string",
+        "invoiceNumber": "string",
+        "invoiceDocumentLink": "string",
+        "invoiceAmount": {
+          "currency": "string",
+          "centAmount": 0,
+          "fraction": 0
+        },
+        "invoiceDate": "2019-10-15T04:53:55.228"
+      },
+      "cartId": "string",
+      "cartOrigin": "string",
+      "orderChannel": {
+        "channel": "string"
+      },
+      "orderCustomInformation": {
+        "id": "string",
+        "name": "string",
+        "type": "string",
+        "description": "string",
+        "values": [
+          "string"
+        ],
+        "order": 0,
+        "group": "string",
+        "isMandatory": true,
+        "metaData": {}
+      },
+      "specialInstructions": {
+        "id": "string",
+        "name": "string",
+        "type": "string",
+        "description": "string",
+        "values": [
+          "string"
+        ],
+        "order": 0,
+        "group": "string",
+        "isMandatory": true,
+        "metaData": {}
+      },
+      "orderStatuses": [
+        {
+          "id": "2bf465cf-acb0-4321-b3d3-ba58e50ab8ee",
+          "status": "string",
+          "eventTime": "2019-10-25T07:14:01.208478"
+        }
+      ],
+      "orderReferences": [
+        {
+          "id": "5c71a041-c3e5-48d5-9a87-921568c661e6",
+          "userId": "string",
+          "shipmentId": "string",
+          "paymentId": "string"
+        }
+      ],
+      "orderLines": [
+        {
+          "id": "6ffc48af-c908-4511-82b0-9f414472210d",
+          "tenantId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "siteId": "string",
+          "parentLineId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "version": "string",
+          "product": {
+            "productId": "string",
+            "skuId": "string",
+            "offerId": "string",
+            "productType": "string",
+            "displayName": "string",
+            "productDescription": "string",
+            "isReturnable": true,
+            "returnWindowInDays": "string"
+          },
+          "quantity": {
+            "quantityNum": "string",
+            "quantityUnit": "MG"
+          },
+          "linePrice": {
+            "currency": "string",
+            "centAmount": 0,
+            "fraction": 0
+          },
+          "taxAmount": {
+            "taxCode": "string",
+            "taxValue": {
+              "currency": "string",
+              "centAmount": 0,
+              "fraction": 0
+            },
+            "taxType": "string",
+            "taxRate": 0.0
+          },
+          "lineStatus": "string",
+          "externalReferenceNumber": "string",
+          "customInformation": {
+            "id": "string",
+            "name": "string",
+            "type": "string",
+            "description": "string",
+            "values": [
+              "string"
+            ],
+            "order": 0,
+            "group": "string",
+            "isMandatory": true,
+            "metaData": {}
+          },
+          "reservation": {
+            "reservationChannelId": "string",
+            "reservationNumber": "string"
+          }
+        }
+      ],
+      "orderLineCharges": [
+        {
+          "id": "0d771f1c-57c1-4944-ace5-7a2455df44b7",
+          "adjustmentAmount": {
+            "currency": "string",
+            "centAmount": 0,
+            "fraction": 0
+          },
+          "adjustmentReference": "string",
+          "adjustmentType": "string",
+          "adjustmentMultiplier": 0
+        }
+      ],
+      "isFraudValidated": true
+    }
+  ]
+}
+
+
+
+

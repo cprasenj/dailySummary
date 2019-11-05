@@ -134,4 +134,29 @@ public class DailySummaryController {
         return new ResponseEntity(obj, HttpStatus.OK);
     }
 
+
+    @RequestMapping(value = "/v1/orders/user/{userId}", method = RequestMethod.GET)
+    @CrossOrigin
+    public ResponseEntity getOrdersForUser() {
+
+        JSONParser jsonParser = new JSONParser();
+        Object obj = "";
+        try (FileReader reader = new FileReader("output1.json"))
+        {
+            //Read JSON file
+            obj = jsonParser.parse(reader);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity(obj, HttpStatus.OK);
+    }
+
+
+
 }
