@@ -5,7 +5,7 @@
         {
           "orderNumber": 12345678765,
           "orderDate": "12/09/19",
-          "purchaseStatus": "active",
+          "purchaseStatus": "cancel",
           "productSwatches": [
             { "imageId": "1714619_01", "quantity": 1 },
             { "imageId": "1714619_12", "quantity": 4 },
@@ -20,7 +20,7 @@
         {
           "orderNumber": 12345678765,
           "orderDate": "12/09/19",
-          "purchaseStatus": "active",
+          "purchaseStatus": "complete",
           "productSwatches": [
             { "imageId": "1714619_01", "quantity": 1 },
             { "imageId": "1714619_12", "quantity": 4 },
