@@ -37,4 +37,5 @@ dependencies {
     compile group: 'org.projectlombok', name: 'lombok', version: '1.16.12'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
     compile "com.github.ulisesbocchio:jasypt-spring-boot-starter:1.11"
+    compile "com.googlecode.json-simple:json-simple:1.1.1"
 }

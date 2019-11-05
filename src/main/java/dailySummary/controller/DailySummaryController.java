@@ -8,11 +8,18 @@ import dailySummary.model.*;
 import dailySummary.service.DailySummaryService;
 import dailySummary.service.MailService;
 import dailySummary.validator.AdminUserValidator;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -105,5 +112,26 @@ public class DailySummaryController {
         return new ResponseEntity(jobUpdateRequest, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/orders", method = RequestMethod.GET)
+    @CrossOrigin
+    public ResponseEntity getOrders() {
+
+        JSONParser jsonParser = new JSONParser();
+        Object obj = "";
+        try (FileReader reader = new FileReader("output.json"))
+        {
+            //Read JSON file
+            obj = jsonParser.parse(reader);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity(obj, HttpStatus.OK);
+    }
 
 }
